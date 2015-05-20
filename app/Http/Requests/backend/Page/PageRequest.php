@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests\backend\Page;
 
-use App\Http\Requests\Request;
+use App\Http\Requests\Request,
+    Entrust;
 
 class PageRequest extends Request {
 
@@ -12,7 +13,7 @@ class PageRequest extends Request {
      * @return bool
      */
     public function authorize() {
-        return true;
+        return Entrust::has(['page-create', 'page-update'], true);
     }
 
     /**

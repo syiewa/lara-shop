@@ -5,8 +5,7 @@ namespace App\Http\Controllers\backend\Page;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\backend\Page\PageRequest;
 use App\Models\Page\Page;
-use Request;
-use DB;
+use DB,Request,Entrust;
 
 class PageCtrl extends Controller {
 
@@ -21,6 +20,9 @@ class PageCtrl extends Controller {
      */
     public function index() {
         //
+        if (!Entrust::can('page-read')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = 'Page List';
         return view('backend.page.index', $this->data);
     }
@@ -57,6 +59,9 @@ class PageCtrl extends Controller {
      */
     public function create() {
         //
+        if (!Entrust::can('page-create')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = "Create " . ucfirst(Request::get('position')) . " Page";
         $this->data['position'] = Request::get('position');
         $this->data['parent'] = Page::where('page_position', Request::get('position'))
@@ -98,6 +103,9 @@ class PageCtrl extends Controller {
      */
     public function edit($id) {
         //
+        if (!Entrust::can('page-update')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = "Edit " . ucfirst(Request::get('position')) . " Page";
         $this->data['position'] = Request::get('position');
         $this->data['page'] = Page::find($id);
@@ -131,6 +139,9 @@ class PageCtrl extends Controller {
      */
     public function destroy($id) {
         //
+        if (!Entrust::can('page-delete')) {
+            return response()->json(['success' => FALSE]);
+        }
         $page = Page::find($id);
         if ($page->delete()) {
             $page->where('page_parent', $id)->update(['page_parent' => 0]);

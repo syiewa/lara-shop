@@ -35,6 +35,7 @@
                                     <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
                                 </ul>-->
             </li>
+            @if(Entrust::can('product-read'))
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-files-o"></i>
@@ -45,6 +46,8 @@
                     <li><a href="{{route('backend.product.create')}}"><i class="fa fa-plus"></i>Add Product</a></li>
                 </ul>
             </li>
+            @endif
+            @if(Entrust::can('category-read'))
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-files-o"></i>
@@ -55,6 +58,8 @@
                     <li><a href="{{route('backend.category.create')}}"><i class="fa fa-plus"></i>Add Category</a></li>
                 </ul>
             </li>
+            @endif
+            @if(Entrust::can('page-read'))
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-files-o"></i>
@@ -65,13 +70,28 @@
                     <li><a href="{{route('backend.page.create')}}"><i class="fa fa-plus"></i>Add Page</a></li>
                 </ul>
             </li>
+            @endif
+            @if(Entrust::can('user-read'))
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-files-o"></i>
+                    <span>Users</span><i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{route('backend.user.index')}}"><i class="fa fa-circle-o"></i>Users List</a></li>
+                    <li><a href="{{route('backend.user.create')}}"><i class="fa fa-plus"></i>Add User</a></li>
+                </ul>
+            </li>
+            @endif
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-files-o"></i>
                     <span>Widget</span><i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    @if(Entrust::can('slideshow-read'))
                     <li><a href="{{route('backend.slideshow.index')}}"><i class="fa fa-circle-o"></i>Slideshow</a></li>
+                    @endif
                     <li><a href="{{route('backend.page.create')}}"><i class="fa fa-plus"></i>Add Page</a></li>
                 </ul>
             </li>

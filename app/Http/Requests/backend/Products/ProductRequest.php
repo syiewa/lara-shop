@@ -12,7 +12,7 @@ class ProductRequest extends Request {
      * @return bool
      */
     public function authorize() {
-        return true;
+        return Entrust::has(['product-create', 'product-update'], true);
     }
 
     /**

@@ -8,10 +8,7 @@ use App\Models\Products\Product;
 use App\Models\Products\Gambar;
 use App\Models\Products\Category;
 use App\Models\Products\Attribute;
-use Image;
-use Request;
-use DB;
-use Storage;
+use DB,Request,Image,Storage,Entrust;
 
 class ProductCtrl extends Controller {
 
@@ -26,6 +23,9 @@ class ProductCtrl extends Controller {
 
     public function index() {
         //
+        if (!Entrust::can('product-read')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = 'List Product';
         return view('backend.product.index', $this->data);
     }
@@ -44,6 +44,9 @@ class ProductCtrl extends Controller {
      */
     public function create() {
         //
+        if (!Entrust::can('product-create')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = 'Create Product';
         $this->data['category'] = Category::where('status', 1)->lists('name', 'id');
         return view('backend.product.create', $this->data);
@@ -62,7 +65,7 @@ class ProductCtrl extends Controller {
             $input = $request->except('image');
             $input['product_price'] = str_replace('.', '', $input['product_price']);
             $cat_slug = Category::find($input['id_category'])->slug;
-            $input['slug'] = $cat_slug.'/'.str_slug($input['product_name']);
+            $input['slug'] = $cat_slug . '/' . str_slug($input['product_name']);
             $input['status'] = $request->get('status') == 'on' ? 1 : 0;
             $attr = array_filter($input['name']);
             $product = new Product($input);
@@ -113,6 +116,9 @@ class ProductCtrl extends Controller {
      */
     public function edit($id) {
         //
+        if (!Entrust::can('product-update')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = 'Edit Product';
         $this->data['product'] = Product::find($id);
         $this->data['category'] = Category::where('status', 1)->lists('name', 'id');
@@ -161,6 +167,9 @@ class ProductCtrl extends Controller {
      */
     public function destroy($id) {
         //
+        if (!Entrust::can('product-delete')) {
+            return response()->json(['success' => FALSE]);
+        }
         $product = Product::find($id);
         $product->attribute()->delete();
         if (count($product->image) > 0) {

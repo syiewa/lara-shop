@@ -68,7 +68,10 @@ class PageCtrl extends Controller {
             return view('front.eshopper.pages.category', $this->data);
         }
         $this->data['page'] = Page\Page::where('page_slug', $slug)->first();
-        return view('front.eshopper.pages.pages', $this->data);
+        if (count($this->data['page'])) {
+            return view('front.eshopper.pages.pages', $this->data);
+        }
+        return abort('404','Page Not Found');
     }
 
     public function checkout() {

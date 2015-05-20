@@ -5,10 +5,8 @@ namespace App\Http\Controllers\backend\Products;
 use App\Http\Controllers\Controller;
 use App\Models\Products\Category;
 use App\Http\Requests\backend\Products\CategoryRequest;
-use Image;
-use Request;
 use Illuminate\Support\Str;
-use Storage;
+use Storage,Request,Image,Entrust;
 
 class CategoryCtrl extends Controller {
 
@@ -33,7 +31,7 @@ class CategoryCtrl extends Controller {
                 if (isset($val['children'])) {
                     foreach ($val['children'] as $childkey => $childval) {
                         $child = Category::find($childval['id']);
-                        $child->slug = str_slug($page->name).'/'.str_slug($child->name);
+                        $child->slug = str_slug($page->name) . '/' . str_slug($child->name);
                         $child->parent = $val['id'];
                         $child->order = $childkey;
                         $child->save();
@@ -47,6 +45,9 @@ class CategoryCtrl extends Controller {
 
     public function index() {
         //
+        if (!Entrust::can('category-read')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = 'List Category';
         return view('backend.category.index', $this->data);
     }
@@ -58,6 +59,9 @@ class CategoryCtrl extends Controller {
      */
     public function create() {
         //
+        if (!Entrust::can('category-create')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = 'Create Category';
         $this->data['parent'] = Category::where('parent', '=', 0)->lists('name', 'id');
         return view('backend.category.create', $this->data);
@@ -111,6 +115,9 @@ class CategoryCtrl extends Controller {
      */
     public function edit($id) {
         //
+        if (!Entrust::can('category-update')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = 'Edit Category';
         $this->data['category'] = Category::find($id);
         $this->data['parent'] = Category::where('id', '!=', $id)->where('parent', '=', 0)->lists('name', 'id');
@@ -160,6 +167,10 @@ class CategoryCtrl extends Controller {
      */
     public function destroy($id) {
         //
+        if (!Entrust::can('category-delete')) {
+            $this->data['category'] = Category::getNested();
+            return view('backend.category.lists', $this->data);
+        }
         $category = Category::find($id);
         if ($category->delete()) {
             $category->where('parent', $id)->update(['parent' => 0]);

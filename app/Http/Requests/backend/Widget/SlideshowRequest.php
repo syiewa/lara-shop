@@ -12,7 +12,7 @@ class SlideshowRequest extends Request {
      * @return bool
      */
     public function authorize() {
-        return true;
+        return Entrust::has(['slideshow-create', 'slideshow-update'], true);
     }
 
     /**
@@ -28,7 +28,7 @@ class SlideshowRequest extends Request {
             'ss_url' => 'url',
         ];
     }
-    
+
     public function messages() {
         return [
             'ss_name.required' => 'Title diperlukan',

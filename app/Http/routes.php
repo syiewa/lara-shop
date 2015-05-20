@@ -10,15 +10,25 @@
   | and give it the controller to call when that URI is requested.
   |
  */
+// Permission route
+Entrust::routeNeedsPermission('backend/*', ['backend'], redirect(''));
+
 Route::pattern('kumis', '.+');
-
-Route::get('home', 'HomeController@index');
-
-Route::controllers([
-    'auth' => 'Auth\AuthController',
-    'password' => 'Auth\PasswordController',
-]);
-
+Route::get('backend',function(){
+   return 'telo'; 
+});
+//Route::get('home', 'HomeController@index');
+//
+//Route::controllers([
+//    'auth' => 'Auth\AuthController',
+//    'password' => 'Auth\PasswordController',
+//]);
+Route::get('login', ['as' => 'login.index', 'uses' => 'backend\LoginCtrl@index']);
+Route::post('login', ['as' => 'do.login', 'uses' => 'backend\LoginCtrl@doLogin']);
+Route::get('logout', function() {
+    Auth::logout();
+    return redirect('');
+});
 // Backend Route
 Route::group(['prefix' => 'backend'], function() {
     // Route Products
@@ -32,6 +42,12 @@ Route::group(['prefix' => 'backend'], function() {
     Route::group(['namespace' => 'backend\Page'], function() {
         Route::resource('page', 'PageCtrl');
     });
+    Route::group(['namespace' => 'backend\Users'], function() {
+        Route::resource('user', 'UserCtrl');
+        Route::resource('role', 'RoleCtrl');
+        Route::get('permission', ['as' => 'perm', 'uses' => 'RoleCtrl@getPerm']);
+        Route::post('permission', ['as' => 'perm.post', 'uses' => 'RoleCtrl@storePerm']);
+    });
     // Widget Route
     Route::group(['namespace' => 'backend\Widget'], function() {
         Route::resource('slideshow', 'SlideshowCtrl');
@@ -44,6 +60,9 @@ Route::group(['prefix' => 'api'], function() {
         Route::get('product', ['as' => 'api.product', 'uses' => 'ProductCtrl@getProduct']);
         Route::get('category', ['as' => 'api.category', 'uses' => 'CategoryCtrl@getCat']);
         Route::post('category', ['as' => 'api.postcat', 'uses' => 'CategoryCtrl@getCat']);
+    });
+    Route::group(['namespace' => 'backend\Users'], function() {
+        Route::get('user', ['as' => 'api.user', 'uses' => 'UserCtrl@getUser']);
     });
     Route::group(['namespace' => 'backend\Page'], function() {
         Route::get('page/{position}', ['as' => 'api.page', 'uses' => 'PageCtrl@getPage']);

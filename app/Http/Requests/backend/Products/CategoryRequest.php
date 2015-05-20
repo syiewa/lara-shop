@@ -12,7 +12,7 @@ class CategoryRequest extends Request {
      * @return bool
      */
     public function authorize() {
-        return true;
+        return Entrust::has(['category-create', 'category-update'], true);
     }
 
     /**
@@ -21,7 +21,7 @@ class CategoryRequest extends Request {
      * @return array
      */
     public function rules() {
-        
+
         return [
             //
             'name' => 'required|unique:product_category,name,' . Request::get('id'),

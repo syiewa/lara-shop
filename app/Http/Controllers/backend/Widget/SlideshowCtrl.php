@@ -5,9 +5,7 @@ namespace App\Http\Controllers\backend\Widget;
 use App\Models\Widget\Slideshow;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\backend\Widget\SlideshowRequest;
-use Request;
-use Image;
-use Storage;
+use Entrust,Storage,Image,Request;
 
 class SlideshowCtrl extends Controller {
 
@@ -36,6 +34,9 @@ class SlideshowCtrl extends Controller {
      */
     public function index() {
         //
+        if (!Entrust::can('slideshow-read')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = 'List Slideshow';
         return view('backend.slideshow.index', $this->data);
     }
@@ -47,6 +48,9 @@ class SlideshowCtrl extends Controller {
      */
     public function create() {
         //
+        if (!Entrust::can('slideshow-create')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = 'Create Slideshow';
         return view('backend.slideshow.create', $this->data);
     }
@@ -93,6 +97,9 @@ class SlideshowCtrl extends Controller {
      */
     public function edit($id) {
         //
+        if (!Entrust::can('slideshow-edit')) {
+            return redirect('');
+        }
         $this->data['sub_title'] = 'Edit Slideshow';
         $this->data['slide'] = Slideshow::find($id);
         return view('backend.slideshow.edit', $this->data);
@@ -137,6 +144,10 @@ class SlideshowCtrl extends Controller {
      */
     public function destroy($id) {
         //
+        if (!Entrust::can('slideshow-delete')) {
+            $this->data['slideshow'] = Slideshow::all();
+            return view('backend.slideshow.lists', $this->data);
+        }
         $slideshow = Slideshow::find($id);
         if (Storage::exists('slideshows/thumb/' . $slideshow->ss_image)) {
             Storage::delete('slideshows/thumb/' . $slideshow->ss_image);
