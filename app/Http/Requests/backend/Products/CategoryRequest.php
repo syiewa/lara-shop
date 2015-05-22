@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\backend\Products;
 
-use App\Http\Requests\Request;
+use App\Http\Requests\Request,Entrust;
 
 class CategoryRequest extends Request {
 
@@ -12,7 +12,7 @@ class CategoryRequest extends Request {
      * @return bool
      */
     public function authorize() {
-        return Entrust::has(['category-create', 'category-update'], true);
+        return Entrust::can(['category-create', 'category-update'], true);
     }
 
     /**

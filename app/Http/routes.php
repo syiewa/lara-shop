@@ -24,6 +24,8 @@ Route::get('backend',function(){
 //    'password' => 'Auth\PasswordController',
 //]);
 Route::get('login', ['as' => 'login.index', 'uses' => 'backend\LoginCtrl@index']);
+Route::get('login/{provider?}', 'backend\LoginCtrl@auth');
+Route::get('account/{provider?}', 'backend\LoginCtrl@auth');
 Route::post('login', ['as' => 'do.login', 'uses' => 'backend\LoginCtrl@doLogin']);
 Route::get('logout', function() {
     Auth::logout();
@@ -33,6 +35,7 @@ Route::get('logout', function() {
 Route::group(['prefix' => 'backend'], function() {
     // Route Products
     Route::group(['namespace' => 'backend\Products'], function() {
+    
         Route::resource('product', 'ProductCtrl');
         Route::resource('category', 'CategoryCtrl');
         Route::resource('image', 'ImageCtrl');

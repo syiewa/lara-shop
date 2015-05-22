@@ -57,14 +57,9 @@
                     <p>Bill To</p>
                     <div class="form-one">
                         <form>
-                            <input type="text" placeholder="Company Name">
-                            <input type="text" placeholder="Email*">
-                            <input type="text" placeholder="Title">
-                            <input type="text" placeholder="First Name *">
-                            <input type="text" placeholder="Middle Name">
-                            <input type="text" placeholder="Last Name *">
-                            <input type="text" placeholder="Address 1 *">
-                            <input type="text" placeholder="Address 2">
+                            <input type="text" placeholder="Email*" value="{{$user->email}}">
+                            <input type="text" placeholder="Name" value="{{$user->name}}">
+                            <textarea placeholder="Address 1 *"></textarea>
                         </form>
                     </div>
                     <div class="form-two">
@@ -92,7 +87,6 @@
                                 <option>Canada</option>
                                 <option>Dubai</option>
                             </select>
-                            <input type="password" placeholder="Confirm password">
                             <input type="text" placeholder="Phone *">
                             <input type="text" placeholder="Mobile Phone">
                             <input type="text" placeholder="Fax">
@@ -109,80 +103,5 @@
             </div>					
         </div>
     </div>
-    <div class="review-payment">
-        <h2>Review & Payment</h2>
-    </div>
-
-    <div class="table-responsive cart_info">
-        <table class="table table-condensed">
-            <thead>
-                <tr class="cart_menu">
-                    <td class="image">Item</td>
-                    <td class="description"></td>
-                    <td class="price">Price</td>
-                    <td class="quantity">Quantity</td>
-                    <td class="total">Total</td>
-                    <td></td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($order['product'] as $product)
-                <tr>
-                    <td class="cart_product">
-                        <a href=""><img src="{{$product['product_img']}}" alt=""></a>
-                    </td>
-                    <td class="cart_description">
-                        <h4><a href="">{{$product['product_name']}}</a></h4>
-                        <p>Web ID: 1089772</p>
-                    </td>
-                    <td class="cart_price">
-                        <p>{{$product['product_price']}}</p>
-                    </td>
-                    <td class="cart_quantity">
-                        {{$product['product_qty']}}
-                    </td>
-                    <td class="cart_total">
-                        <p class="cart_total_price">{{$product['product_tprice']}}</p>
-                    </td>
-                </tr>
-                @endforeach
-                <tr>
-                    <td colspan="4">&nbsp;</td>
-                    <td colspan="2">
-                        <table class="table table-condensed total-result">
-                            <tr>
-                                <td>Cart Sub Total</td>
-                                <td>{{$order['sub_total']}}</td>
-                            </tr>
-                            <tr>
-                                <td>Exo Tax</td>
-                                <td>$2</td>
-                            </tr>
-                            <tr class="shipping-cost">
-                                <td>Shipping Cost</td>
-                                <td>{{$order['shipping']}}</td>										
-                            </tr>
-                            <tr>
-                                <td>Total</td>
-                                <td><span>{{$order['total']}}</span></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="payment-options">
-        <span>
-            <label><input type="checkbox"> Direct Bank Transfer</label>
-        </span>
-        <span>
-            <label><input type="checkbox"> Check Payment</label>
-        </span>
-        <span>
-            <label><input type="checkbox"> Paypal</label>
-        </span>
-    </div>
-</div>
 </section> <!--/#cart_items-->
 @stop

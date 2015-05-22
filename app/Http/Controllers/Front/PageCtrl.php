@@ -8,13 +8,14 @@ use App\Models\Products;
 use App\Models\Page;
 use App\Models\Widget;
 use Illuminate\Support\Str;
-use Session;
+use Session,
+    Auth;
 
 class PageCtrl extends Controller {
 
     public function __construct() {
         $this->data['categories'] = Products\Category::where('status', '!=', 0)->GetNested();
-        $this->data['products'] = Products\Product::where('status', '!=', 0)->take(3)->get();
+        $this->data['products'] = Products\Product::where('product_status', '!=', 0)->take(3)->get();
         $this->data['mtop'] = Page\Page::where('page_status', 1)->where('page_position', '=', 'top')->GetNested('top');
         $this->data['mbottom'] = Page\Page::where('page_status', 1)->where('page_position', '=', 'bottom')->GetNested('bottom');
         $this->data['slideshow'] = Widget\Slideshow::where('ss_status', 1)->orderBy('ss_order')->get();
@@ -71,7 +72,7 @@ class PageCtrl extends Controller {
         if (count($this->data['page'])) {
             return view('front.eshopper.pages.pages', $this->data);
         }
-        return abort('404','Page Not Found');
+        return abort('404', 'Page Not Found');
     }
 
     public function checkout() {
@@ -84,16 +85,17 @@ class PageCtrl extends Controller {
         if (Request::get('itemCount') == 0) {
             return redirect()->back();
         }
-        if ($user) {
-            return $this->payment(Request::all());
+        if (Auth::check()) {
+            return $this->shipping(Request::all());
         }
         $this->data['cart'] = Request::all();
         return view('front.eshopper.pages.checkout', $this->data);
     }
 
-    public function payment($data = '') {
+    public function shipping($data = '') {
+        $this->data['user'] = Auth::user();
         $this->data['order'] = $this->setOrder($data);
-        return view('front.eshopper.pages.payment', $this->data);
+        return view('front.eshopper.pages.shipping', $this->data);
     }
 
     private function setOrder($data) {

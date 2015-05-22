@@ -35,7 +35,7 @@ $(function() {
         {{$title}}
         <small>{{$sub_title}}</small>
     </h1>
-    {!! Breadcrumbs::render('categorycreate') !!}
+    {!! Breadcrumbs::render('useredit') !!}
 </section>
 
 <section class="content">
@@ -78,7 +78,10 @@ $(function() {
                             <select id="form-field-select-3" class="form-control search-select" name="role">
                                 <option value="">Pilih Role</option>
                                 @foreach($roles as $key=>$val)
+                                @if($user->roles()->count())
                                 <option value="{{$key}}" {{$key == $user->roles()->first()->id ? 'selected="selected"' : ''}}>{{$val}}</option>
+                                @endif
+                                <option value="{{$key}}">{{$val}}</option>
                                 @endforeach
                             </select>
                         </div>

@@ -6,7 +6,7 @@
         {{$title}}
         <small>{{$sub_title}}</small>
     </h1>
-    {!! Breadcrumbs::render('categorycreate') !!}
+    {!! Breadcrumbs::render('roleedit') !!}
 </section>
 
 <section class="content">

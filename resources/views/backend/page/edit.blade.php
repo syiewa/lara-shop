@@ -75,7 +75,7 @@ $(function() {
         {{$title}}
         <small>{{$sub_title}}</small>
     </h1>
-    {!! Breadcrumbs::render('categorycreate') !!}
+    {!! Breadcrumbs::render('pageedit') !!}
 </section>
 
 <section class="content">

@@ -40,12 +40,17 @@ $(document).ready(function() {
         }, "html");
     });
     simpleCart.bind('beforeCheckout', function(data) {
-        if ($("#city_tujuan").val() == '' && $(document).find('.tarif').length == 0) {
+        var tarif = $(document).find('.tarif');
+        if ($("#city_tujuan").val() == '') {
             alert('Kota Tujuan harap diisi');
             return false;
         }
-        if ($(document).find('.tarif').val() == 0) {
-            alert('Pilih ongkos kirim');
+        if (tarif.length === 0) {
+            alert('Tekan Tombol Cek Ongkir terlebih dahulu');
+            return false;
+        }
+        if (!$("input[name='tarif']:checked").val()) {
+            alert('Pilih Ongkos Kirim!');
             return false;
         }
     });

@@ -32,3 +32,47 @@ Breadcrumbs::register('categoryedit', function($breadcrumbs) {
     $breadcrumbs->parent('category');
     $breadcrumbs->push('Edit Category', route('backend.category.edit'));
 });
+Breadcrumbs::register('page', function($breadcrumbs) {
+    $breadcrumbs->parent('home');
+    $breadcrumbs->push('Page', route('backend.page.index'));
+});
+Breadcrumbs::register('pagecreate', function($breadcrumbs) {
+    $breadcrumbs->parent('page');
+    $breadcrumbs->push('Create Page', route('backend.page.create'));
+});
+Breadcrumbs::register('pageedit', function($breadcrumbs) {
+    $breadcrumbs->parent('page');
+    $breadcrumbs->push('Edit Page', route('backend.page.edit'));
+});
+Breadcrumbs::register('user', function($breadcrumbs) {
+    $breadcrumbs->parent('home');
+    $breadcrumbs->push('User', route('backend.user.index'));
+});
+Breadcrumbs::register('usercreate', function($breadcrumbs) {
+    $breadcrumbs->parent('user');
+    $breadcrumbs->push('Create User', route('backend.user.create'));
+});
+Breadcrumbs::register('useredit', function($breadcrumbs) {
+    $breadcrumbs->parent('user');
+    $breadcrumbs->push('Edit User', route('backend.user.edit'));
+});
+Breadcrumbs::register('rolecreate', function($breadcrumbs) {
+    $breadcrumbs->parent('user');
+    $breadcrumbs->push('Create Role', route('backend.role.create'));
+});
+Breadcrumbs::register('roleedit', function($breadcrumbs) {
+    $breadcrumbs->parent('user');
+    $breadcrumbs->push('Edit Role', route('backend.role.edit'));
+});
+Breadcrumbs::register('slideshow', function($breadcrumbs) {
+    $breadcrumbs->parent('home');
+    $breadcrumbs->push('Slideshow', route('backend.slideshow.index'));
+});
+Breadcrumbs::register('slideshowcreate', function($breadcrumbs) {
+    $breadcrumbs->parent('slideshow');
+    $breadcrumbs->push('Create Slideshow', route('backend.slideshow.create'));
+});
+Breadcrumbs::register('slideshowedit', function($breadcrumbs) {
+    $breadcrumbs->parent('slideshow');
+    $breadcrumbs->push('Edit Slideshow', route('backend.slideshow.edit'));
+});

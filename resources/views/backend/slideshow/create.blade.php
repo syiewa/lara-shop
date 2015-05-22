@@ -38,7 +38,7 @@ $(function() {
         {{$title}}
         <small>{{$sub_title}}</small>
     </h1>
-    {!! Breadcrumbs::render('categorycreate') !!}
+    {!! Breadcrumbs::render('slideshowcreate') !!}
 </section>
 
 <section class="content">

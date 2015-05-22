@@ -5,9 +5,12 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Models\Users\User;
 use App\Http\Requests\backend\LoginRequest;
-use Auth,
+use App\AuthenticateUser;
+use Request,
+    Auth,
     Exception,
-    Entrust;
+    Entrust,
+    Socialize;
 
 class LoginCtrl extends Controller {
 
@@ -16,6 +19,14 @@ class LoginCtrl extends Controller {
      *
      * @return Response
      */
+    public function __construct() {
+        if(Auth::check()){
+            if(Entrust::can(['backend'])){
+                return redirect()->route('admin.product.index');
+            }
+        }
+    }
+
     public function index() {
         //
         return view('backend.login');
@@ -48,6 +59,21 @@ class LoginCtrl extends Controller {
         return redirect('login')->withInput()->withErrors(['message' => $message]);
     }
 
+    public function redirect($provider) {
+        return Socialize::with($provider)->redirect();
+    }
+
+    // to get authenticate user data
+    public function account($provider) {
+        $user = Socialize::with($provider)->user();
+        // Do your stuff with user data.
+        print_r($user);
+        die;
+    }
+
+    public function auth(AuthenticateUser $authenticateUser, $provider = null) {
+        return $authenticateUser->execute(Request::all(), $this, $provider);
+    }
 
     /**
      * Show the form for creating a new resource.

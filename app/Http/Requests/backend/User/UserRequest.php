@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests\backend\User;
 
-use App\Http\Requests\Request;
+use App\Http\Requests\Request,
+    Entrust;
 
 class UserRequest extends Request {
 
@@ -12,7 +13,7 @@ class UserRequest extends Request {
      * @return bool
      */
     public function authorize() {
-        return Entrust::has(['user-create', 'user-update'], true);
+        return Entrust::can(['user-create', 'user-update'], true);
     }
 
     /**

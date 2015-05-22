@@ -34,7 +34,7 @@ $(function() {
                     return 'Rp. ' + data.format(2, 3, '.', ',');
                 }
             },
-            {"mData": "status", sWidth: '10%', "sType": "numeric",
+            {"mData": "product_status", sWidth: '10%', "sType": "numeric",
                 "mRender": function(data) {
                     if (data === 1) {
                         return '<span class="label label-success">Active</span>';
@@ -53,6 +53,25 @@ $(function() {
             },
         ],
     });
+    var searchWait = 0;
+    var searchWaitInterval;
+    $('.dataTables_filter input')
+            .unbind('keypress keyup')
+            .bind('keypress keyup', function(e) {
+                var item = $(this);
+                searchWait = 0;
+                if (!searchWaitInterval)
+                    searchWaitInterval = setInterval(function() {
+                        if (searchWait >= 3) {
+                            clearInterval(searchWaitInterval);
+                            searchWaitInterval = '';
+                            searchTerm = $(item).val();
+                            proDt.fnFilter(searchTerm);
+                            searchWait = 0;
+                        }
+                        searchWait++;
+                    }, 200);
+            });
     $("#product-table").on('click', '.delete-row', function(event) {
         var id = $(this).attr('href');
         var nRow = $(this).parents('tr')[0];

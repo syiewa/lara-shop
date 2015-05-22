@@ -120,6 +120,7 @@ return [
         'Illuminate\View\ViewServiceProvider',
         'Intervention\Image\ImageServiceProvider',
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
+        'Laravel\Socialite\SocialiteServiceProvider',
         /*
          * Application Service Providers...
          */
@@ -175,6 +176,8 @@ return [
         'View' => 'Illuminate\Support\Facades\View',
         'Image' => 'Intervention\Image\Facades\Image',
         'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
-        'Entrust' => 'Zizaco\Entrust\EntrustFacade'
+        'Entrust' => 'Zizaco\Entrust\EntrustFacade',
+        'Socialize' => 'Laravel\Socialite\Facades\Socialite',
+        
     ],
 ];

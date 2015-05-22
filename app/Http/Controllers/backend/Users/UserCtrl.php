@@ -86,7 +86,7 @@ class UserCtrl extends Controller {
      */
     public function edit($id) {
         //
-        if (!Entrust::can('user-edit')) {
+        if (!Entrust::can('user-update')) {
             return redirect('');
         }
         $this->data['sub_title'] = 'Edit User';

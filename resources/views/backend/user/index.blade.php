@@ -69,7 +69,7 @@ $(document).ready(function() {
         {{$title}}
         <small>{{$sub_title}}</small>
     </h1>
-    {!! Breadcrumbs::render('products') !!}
+    {!! Breadcrumbs::render('user') !!}
 </section>
 
 <section class="content">

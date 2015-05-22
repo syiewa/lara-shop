@@ -117,7 +117,7 @@ $(document).ready(function() {
         {{$title}}
         <small>{{$sub_title}}</small>
     </h1>
-    {!! Breadcrumbs::render('category') !!}
+    {!! Breadcrumbs::render('slideshow') !!}
 </section>
 
 <section class="content">

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\backend\Products;
 
-use App\Http\Requests\Request;
+use App\Http\Requests\Request,Entrust;
 
 class ProductRequest extends Request {
 
@@ -12,7 +12,7 @@ class ProductRequest extends Request {
      * @return bool
      */
     public function authorize() {
-        return Entrust::has(['product-create', 'product-update'], true);
+        return Entrust::can(['product-create', 'product-update'], true);
     }
 
     /**

@@ -92,7 +92,17 @@
                     @if(Entrust::can('slideshow-read'))
                     <li><a href="{{route('backend.slideshow.index')}}"><i class="fa fa-circle-o"></i>Slideshow</a></li>
                     @endif
-                    <li><a href="{{route('backend.page.create')}}"><i class="fa fa-plus"></i>Add Page</a></li>
+                    <li><a href="{{route('backend.page.create')}}"><i class="fa fa-plus"></i>Social Account</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-files-o"></i>
+                    <span>Options</span><i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{route('backend.slideshow.index')}}"><i class="fa fa-circle-o"></i>General Options</a></li>
+                    <li><a href="{{route('backend.page.create')}}"><i class="fa fa-plus"></i>Shop Options</a></li>
                 </ul>
             </li>
             <li>

@@ -30,10 +30,10 @@ class Product extends Model {
     }
 
     public function scopeDtProduct($query) {
-        $aColumns = array('id', 'product_name', 'name', 'product_price', 'path_thumb', 'status');
+        $aColumns = array('id', 'product_name', 'name', 'product_price', 'path_thumb', 'product_status');
         $rResult = $query->groupBy('product.id')->leftJoin('product_category as category', 'category.id', '=', 'product.id_category')
                 ->leftJoin('product_img as gambar', 'product.id', '=', 'gambar.id_product')
-                ->select(DB::raw("SQL_CALC_FOUND_ROWS product.id,product.product_name,product.product_price,product.status,gambar.path_thumb,IFNULL(category.name,'') AS name"));
+                ->select(DB::raw("SQL_CALC_FOUND_ROWS product.id,product.product_name,product.product_price,product.product_status,gambar.path_thumb,IFNULL(category.name,'') AS name"));
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = "id";
         /*

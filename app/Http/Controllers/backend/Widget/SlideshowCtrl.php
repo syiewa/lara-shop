@@ -97,7 +97,7 @@ class SlideshowCtrl extends Controller {
      */
     public function edit($id) {
         //
-        if (!Entrust::can('slideshow-edit')) {
+        if (!Entrust::can('slideshow-update')) {
             return redirect('');
         }
         $this->data['sub_title'] = 'Edit Slideshow';
