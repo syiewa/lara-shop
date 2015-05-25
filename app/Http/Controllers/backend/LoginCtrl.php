@@ -11,8 +11,13 @@ use Request,
     Exception,
     Entrust,
     Socialize;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class LoginCtrl extends Controller {
+
+    use ResetsPasswords;
+
+    protected $redirectTo = '/customer/login';
 
     /**
      * Display a listing of the resource.
@@ -20,8 +25,8 @@ class LoginCtrl extends Controller {
      * @return Response
      */
     public function __construct() {
-        if(Auth::check()){
-            if(Entrust::can(['backend'])){
+        if (Auth::check()) {
+            if (Entrust::can(['backend'])) {
                 return redirect()->route('admin.product.index');
             }
         }
@@ -46,15 +51,24 @@ class LoginCtrl extends Controller {
                 throw new Exception("Email atau Password Salah");
             } elseif ($remember) {
                 if (Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1, $remember])) {
-                    return redirect('backend/product');
+                    if (Entrust::can(['backend'], true)) {
+                        return redirect('backend/product');
+                    }
+                    return redirect('customer/account');
                 }
             } else {
                 if (Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1])) {
-                    return redirect('backend/product');
+                    if (Entrust::can(['backend'], true)) {
+                        return redirect('backend/product');
+                    }
+                    return redirect('customer/account');
                 }
             }
         } catch (Exception $e) {
             $message = $e->getMessage();
+        }
+        if ($request->has('page')) {
+            return redirect('customer/login')->withInput()->withErrors(['message' => $message]);
         }
         return redirect('login')->withInput()->withErrors(['message' => $message]);
     }

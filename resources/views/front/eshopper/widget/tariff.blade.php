@@ -1,5 +1,7 @@
 <li>
     @if(count($tariff))
+    <input type='hidden' id='province' value='{{$destination['province_id']}}'>
+    <input type='hidden' id='city_name' value='{{$destination['city_id']}}'>
     @foreach($tariff as $tarif)
     @if(count($tarif['costs']) > 0)
     @foreach($tarif['costs'] as $cost)
@@ -18,13 +20,7 @@
     @else
     <div class="panel panel-default">
         <div class="panel-body">
-            Tarif Pengiriman Tidak diketemukan / Tarif Flat
-            <div class="radio">
-                <label>
-                    <input type="radio" name="tarif"  class="tarif" value="20000">
-                    Rp. 20.000,-
-                </label>
-            </div>
+            Tarif Pengiriman Tidak diketemukan.
         </div>
     </div>
     @endif

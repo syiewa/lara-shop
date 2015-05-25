@@ -82,6 +82,16 @@
                     @section('sidebar')
                     @include('front.eshopper.layouts.sidebar',$categories)
                     @show
+                    @if(count($errors))
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     @yield('main')
                 </div>
             </div>

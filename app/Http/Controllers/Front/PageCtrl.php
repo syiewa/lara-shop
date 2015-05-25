@@ -8,6 +8,7 @@ use App\Models\Products;
 use App\Models\Page;
 use App\Models\Widget;
 use Illuminate\Support\Str;
+use App\Http\Requests\ShippingRequest;
 use Session,
     Auth;
 
@@ -31,30 +32,6 @@ class PageCtrl extends Controller {
         return view('front.eshopper.pages.home', $this->data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create() {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store() {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function show($slug) {
         //
         $findcat = Products\Category::with('product')->where('slug', $slug)->first();
@@ -81,20 +58,30 @@ class PageCtrl extends Controller {
     }
 
     public function postcheckout() {
-        $user = TRUE;
-        if (Request::get('itemCount') == 0) {
-            return redirect()->back();
+        if (Request::method() == 'POST') {
+            if (Request::get('itemCount') == 0) {
+                return redirect()->back()->withErrors(['message' => 'Keranjang Belanja Kosong']);
+            }
+            if (Auth::check()) {
+                return redirect()->to('checkout/shipping')->with(['data' => Request::all()]);
+            }
         }
-        if (Auth::check()) {
-            return $this->shipping(Request::all());
-        }
-        $this->data['cart'] = Request::all();
         return view('front.eshopper.pages.checkout', $this->data);
     }
 
-    public function shipping($data = '') {
+    public function shipping() {
+        $data = Session::get('data');
+        if (empty($data)) {
+            if (Session::has('order')) {
+                $this->data['order'] = Session::get('order');
+            } else {
+                return redirect('checkout');
+            }
+        } else {
+            $this->data['order'] = $this->setOrder($data);
+            Session::put(['order' => $this->setOrder($data)]);
+        }
         $this->data['user'] = Auth::user();
-        $this->data['order'] = $this->setOrder($data);
         return view('front.eshopper.pages.shipping', $this->data);
     }
 
@@ -120,37 +107,20 @@ class PageCtrl extends Controller {
             $order['sub_total'] = $total;
         }
         $order['total'] = $order['sub_total'] + $order['shipping'];
+        $order['city'] = $data['city'];
+        $order['province'] = $data['province'];
         return $order;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id) {
-        //
+    public function postShipping(ShippingRequest $request) {
+        dd(Request::all());
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update($id) {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id) {
-        //
+    public function getAccount() {
+        if (!Auth::check()) {
+            return redirect('customer/login');
+        }
+        return view('front.eshopper.pages.account', $this->data);
     }
 
 }

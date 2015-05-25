@@ -37,7 +37,22 @@ $(document).ready(function() {
         var telo = {'_token': "{{csrf_token()}}", 'data': $('#jne_ongkir').serialize()};
         $.post('{{url("api/ongkir/tariff")}}', telo, function(result) {
             $('.user_option').html(result);
-        }, "html");
+        }, "html").done(function() {
+            var province = $('#jne_ongkir').find('#province').val();
+            var city = $('#jne_ongkir').find('#city_name').val();
+            simpleCart({
+                checkout: {
+                    type: "SendForm",
+                    method: "POST",
+                    url: "{{url('checkout/login')}}",
+                    extra_data: {
+                        _token: "{{csrf_token()}}",
+                        city: city,
+                        province: province,
+                    }
+                }
+            });
+        });
     });
     simpleCart.bind('beforeCheckout', function(data) {
         var tarif = $(document).find('.tarif');
@@ -61,16 +76,7 @@ $(document).ready(function() {
         });
         simpleCart.update();
     });
-    simpleCart({
-        checkout: {
-            type: "SendForm",
-            method: "POST",
-            url: "{{url('checkout')}}",
-            extra_data: {
-                _token: "{{csrf_token()}}"
-            }
-        }
-    });
+
 });
 </script>
 @endsection

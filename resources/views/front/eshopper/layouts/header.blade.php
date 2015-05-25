@@ -33,36 +33,38 @@
                         <a href="index.html"><img src="{{asset('front/eshopper/images/home/logo.png')}}" alt="" /></a>
                     </div>
                     <div class="btn-group pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                                USA
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Canada</a></li>
-                                <li><a href="#">UK</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                                DOLLAR
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Canadian Dollar</a></li>
-                                <li><a href="#">Pound</a></li>
-                            </ul>
-                        </div>
+                        <!--                        <div class="btn-group">
+                                                    <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
+                                                        USA
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#">Canada</a></li>
+                                                        <li><a href="#">UK</a></li>
+                                                    </ul>
+                                                </div>
+                        
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
+                                                        DOLLAR
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#">Canadian Dollar</a></li>
+                                                        <li><a href="#">Pound</a></li>
+                                                    </ul>
+                                                </div>-->
                     </div>
                 </div>
                 <div class="col-sm-8">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
-                            <li><a href="#"><i class="fa fa-user"></i> Account</a></li>
-                            <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
-                            <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>          
-                            <li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+                            @if (Auth::check())
+                            <li><a href="{{url('customer/account')}}"><i class="fa fa-user"></i> Account</a></li>
+                            <li><a href="{{url('logout')}}"><i class="fa fa-lock"></i> Logout</a></li>
+                            @else
+                            <li><a href="{{url('customer/login')}}"><i class="fa fa-lock"></i> Login</a></li>
+                            @endif
                             <li><ul class="nav navbar-nav navbar-right">
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="glyphicon glyphicon-shopping-cart"></span> <span class="simpleCart_total"></span> - <span id="simpleCart_quantity" class="simpleCart_quantity"></span> Items<span class="caret"></span></a>

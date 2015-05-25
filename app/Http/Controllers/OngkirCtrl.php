@@ -56,18 +56,27 @@ class OngkirCtrl extends Controller {
      *
      * @return Response
      */
-    public function getProvince($id = '') {
+    public function getProvince($id = null) {
         //
         $data = $this->curl_get_content('http://rajaongkir.com/api/starter/province?id=' . $id);
-        return $data;
+        $data = json_decode($data, true);
+        $this->data['province'] = $data['rajaongkir']['results'];
+        return view('front.eshopper.widget.provinsi', $this->data);
+    }
+
+    public function getKota($provinceId = '') {
+        $data = $this->curl_get_content('http://rajaongkir.com/api/starter/city?&province=' . $provinceId);
+        $city = json_decode($data, true);
+        $this->data['city'] = $city['rajaongkir']['results'];
+        return view('front.eshopper.widget.kota', $this->data);
     }
 
     public function getCity($provinceId = '', $cityId = '') {
         $data = $this->curl_get_content('http://rajaongkir.com/api/starter/city?id=' . $cityId . '&province=' . $provinceId);
         $city = json_decode($data, true);
         $lookup = [];
-        foreach($city['rajaongkir']['results'] as $result){
-            $lookup[] = ['value' => $result['city_name'],'data' => $result['city_id']];
+        foreach ($city['rajaongkir']['results'] as $result) {
+            $lookup[] = ['value' => $result['city_name'], 'data' => $result['city_id']];
         }
         return response()->json($lookup);
     }
@@ -75,10 +84,13 @@ class OngkirCtrl extends Controller {
     public function postTariff() {
         $input = '';
         $input = Request::get('data');
-        $data = $this->curl_get_content('http://rajaongkir.com/api/starter/cost', 'POST',$input);
-        $data = json_decode($data,true);
-        $this->data['tariff'] = $data['rajaongkir']['results'];
-        return view('front.eshopper.widget.tariff',$this->data);
+        $data = $this->curl_get_content('http://rajaongkir.com/api/starter/cost', 'POST', $input);
+        $data = json_decode($data, true);
+        if ($data['rajaongkir']['status']['code'] == '200') {
+            $this->data['destination'] = $data['rajaongkir']['destination_details'];
+            $this->data['tariff'] = $data['rajaongkir']['results'];
+        }
+        return view('front.eshopper.widget.tariff', $this->data);
     }
 
     /**

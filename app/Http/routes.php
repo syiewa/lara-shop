@@ -14,8 +14,8 @@
 Entrust::routeNeedsPermission('backend/*', ['backend'], redirect(''));
 
 Route::pattern('kumis', '.+');
-Route::get('backend',function(){
-   return 'telo'; 
+Route::get('backend', function() {
+    return 'telo';
 });
 //Route::get('home', 'HomeController@index');
 //
@@ -23,6 +23,7 @@ Route::get('backend',function(){
 //    'auth' => 'Auth\AuthController',
 //    'password' => 'Auth\PasswordController',
 //]);
+Route::controllers((['password' => 'backend\LoginCtrl']));
 Route::get('login', ['as' => 'login.index', 'uses' => 'backend\LoginCtrl@index']);
 Route::get('login/{provider?}', 'backend\LoginCtrl@auth');
 Route::get('account/{provider?}', 'backend\LoginCtrl@auth');
@@ -35,7 +36,7 @@ Route::get('logout', function() {
 Route::group(['prefix' => 'backend'], function() {
     // Route Products
     Route::group(['namespace' => 'backend\Products'], function() {
-    
+
         Route::resource('product', 'ProductCtrl');
         Route::resource('category', 'CategoryCtrl');
         Route::resource('image', 'ImageCtrl');
@@ -79,8 +80,17 @@ Route::group(['prefix' => 'api'], function() {
 
 Route::group(['namespace' => 'Front'], function() {
     Route::get('/', 'PageCtrl@index');
+    Route::group(['prefix' => 'customer'], function() {
+        Route::get('login', 'PageCtrl@postcheckout');
+        Route::get('account', 'PageCtrl@getAccount');
+    });
+
     Route::get('checkout', 'PageCtrl@checkout');
-    Route::post('/checkout', 'PageCtrl@postcheckout');
+    Route::group(['prefix' => 'checkout'], function() {
+        Route::post('login', 'PageCtrl@postcheckout');
+        Route::get('shipping', 'PageCtrl@shipping');
+        Route::post('shipping','PageCtrl@postShipping');
+    });
     Route::get('/product/{kumis}', 'PageCtrl@show');
     Route::get('/{kumis}', 'PageCtrl@show');
 });
