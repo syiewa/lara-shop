@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Products;
 use App\Models\Page;
 use App\Models\Widget;
+use App\Models\Users\User;
 use Illuminate\Support\Str;
 use App\Http\Requests\ShippingRequest;
 use Session,
@@ -89,7 +90,12 @@ class PageCtrl extends Controller {
         $order = [];
         $total = 0;
         for ($i = 1; $i <= $data['itemCount']; $i++) {
-            $order['shipping'] = $data['shipping'];
+            $order['shipping'] = [
+                'service' => $data['service'],
+                'city' => $data['city'],
+                'province' => $data['province'],
+                'fee' => $data['shipping']
+            ];
             $product_id = explode(',', str_replace(' ', '', $data['item_options_' . $i]));
             $pro_id = preg_replace("/[^0-9,.]/", "", $product_id[0]);
             unset($product_id[0]);
@@ -106,14 +112,26 @@ class PageCtrl extends Controller {
             $total += $data['item_quantity_' . $i] * $data['item_price_' . $i];
             $order['sub_total'] = $total;
         }
-        $order['total'] = $order['sub_total'] + $order['shipping'];
-        $order['city'] = $data['city'];
-        $order['province'] = $data['province'];
+        $order['total'] = $order['sub_total'] + $order['shipping']['fee'];
         return $order;
     }
 
     public function postShipping(ShippingRequest $request) {
-        dd(Request::all());
+        $input = $request->all();
+        $input['city'] = $order['city'];
+        $input['province'] = $order['province'];
+        $user = User::find($input['user_id']);
+        $order = Session::get('order');
+        $order['user'] = $request->except('_token');
+        Session::put(['order' => $order]);
+        if ($user->update($input)) {
+
+            return response()->json(['success' => TRUE]);
+        }
+    }
+
+    public function getPayment() {
+        return 1;
     }
 
     public function getAccount() {

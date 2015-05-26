@@ -12,7 +12,9 @@
  */
 // Permission route
 Entrust::routeNeedsPermission('backend/*', ['backend'], redirect(''));
-
+Route::get('test',function(){
+   return 1; 
+});
 Route::pattern('kumis', '.+');
 Route::get('backend', function() {
     return 'telo';
@@ -90,6 +92,7 @@ Route::group(['namespace' => 'Front'], function() {
         Route::post('login', 'PageCtrl@postcheckout');
         Route::get('shipping', 'PageCtrl@shipping');
         Route::post('shipping','PageCtrl@postShipping');
+        Route::get('payment','PageCtrl@getPayment');
     });
     Route::get('/product/{kumis}', 'PageCtrl@show');
     Route::get('/{kumis}', 'PageCtrl@show');

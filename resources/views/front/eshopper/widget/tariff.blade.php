@@ -7,10 +7,10 @@
     @foreach($tarif['costs'] as $cost)
     <div class="panel panel-default">
         <div class="panel-body">
-            {{$cost['service']}}
+            {{$tarif['name'].' - '.$cost['service'].' / '.$cost['description']}}
             <div class="radio">
                 <label>
-                    <input type="radio" name="tarif"  class="tarif" value="{{$cost['cost'][0]['value']}}">
+                    <input type="radio" name="tarif"  class="tarif" value="{{$tarif['code'].'-'.$cost['service'].'-'.$cost['cost'][0]['value']}}">
                     {{$cost['cost'][0]['value']}}
                 </label>
             </div>

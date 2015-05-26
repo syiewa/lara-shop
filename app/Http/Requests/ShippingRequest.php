@@ -23,7 +23,7 @@ class ShippingRequest extends Request {
 	{
 		return [
 			//
-                    'email' => 'required|email',
+                    'email' => 'required|email|unique:users,email,' . Request::get('user_id'),
                     'name' => 'required',
                     'address' => 'required',
                     'phone' => 'required',

@@ -18,6 +18,7 @@
 <script>
 $(document).ready(function() {
     var countries = [];
+    var service = '';
     $.get('{{url("api/ongkir/city")}}', function(e) {
         $('#city_asal').autocomplete({
             lookup: e,
@@ -32,6 +33,7 @@ $(document).ready(function() {
             }
         });
     });
+
     $('#cek-ongkir').click(function(e) {
         e.preventDefault();
         var telo = {'_token': "{{csrf_token()}}", 'data': $('#jne_ongkir').serialize()};
@@ -40,6 +42,16 @@ $(document).ready(function() {
         }, "html").done(function() {
             var province = $('#jne_ongkir').find('#province').val();
             var city = $('#jne_ongkir').find('#city_name').val();
+            $(document).on('change', '.tarif', function() {
+                value = $(this).val();
+                kampret = value.split('-');
+                price = kampret[2];
+                service = kampret[0] + '-' + kampret[1];
+                var telo = simpleCart.shipping(function() {
+                    return parseInt(price);
+                });
+                simpleCart.update();
+            });
             simpleCart({
                 checkout: {
                     type: "SendForm",
@@ -49,6 +61,7 @@ $(document).ready(function() {
                         _token: "{{csrf_token()}}",
                         city: city,
                         province: province,
+                        service: $('#jne_ongkir').find('.tarif').val(),
                     }
                 }
             });
@@ -69,14 +82,6 @@ $(document).ready(function() {
             return false;
         }
     });
-    $(document).on('change', '.tarif', function() {
-        kampret = $(this).val();
-        var telo = simpleCart.shipping(function() {
-            return parseInt(kampret);
-        });
-        simpleCart.update();
-    });
-
 });
 </script>
 @endsection

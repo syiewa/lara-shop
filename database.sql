@@ -29,6 +29,36 @@ CREATE TABLE `migrations` (
 
 insert  into `migrations`(`migration`,`batch`) values ('2014_10_12_000000_create_users_table',1),('2014_10_12_100000_create_password_resets_table',1),('2015_05_19_014556_entrust_setup_tables',1);
 
+/*Table structure for table `order` */
+
+DROP TABLE IF EXISTS `order`;
+
+CREATE TABLE `order` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) NOT NULL,
+  `payment_id` int(10) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `total_price` int(100) DEFAULT NULL,
+  `options` text,
+  `status` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `order` */
+
+/*Table structure for table `order_product` */
+
+DROP TABLE IF EXISTS `order_product`;
+
+CREATE TABLE `order_product` (
+  `order_id` int(10) DEFAULT NULL,
+  `product_id` int(10) DEFAULT NULL,
+  `quantity` int(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `order_product` */
+
 /*Table structure for table `pages` */
 
 DROP TABLE IF EXISTS `pages`;
@@ -287,7 +317,7 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`name`,`email`,`password`,`remember_token`,`created_at`,`updated_at`,`status`,`username`,`avatar`,`provider`,`provider_id`,`phone`,`mob_phone`,`city`,`province`,`address`) values (2,'admin','ada@ada.com','$2y$10$OK6MOdj89yFJ3rXiIb9vyO7aQrUgzQLNzM7Mx8MabcYI5OmDtWO2i','I8ljM44eBuPnQSC3ahOOoZXB8sSm3xQ9KVsUFkIVm1nvgjnWIZ78sO43CcWt','2015-05-19 03:00:32','2015-05-25 02:55:47',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(6,'test 12345','telo33@telo.com','',NULL,'2015-05-20 04:01:38','2015-05-20 04:08:00',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(9,'Wasi Arnosa','devil.syiewa@gmail.com','$2y$10$4xJ47eOcHvb.HqpAM32WxOG1CaufB5aryFP01kumUMJ8Xf.mc3uR6','BWV4b8k8EXXCVTi5CyFKFvykObLI0XyjFDUi3uf9x1fQyTh24jMMfmHTJYRO','2015-05-22 08:04:42','2015-05-25 03:44:50',1,NULL,'https://graph.facebook.com/v2.2/1044947206/picture?type=normal',NULL,'1044947206',NULL,NULL,NULL,NULL,NULL),(10,'Wasi Arnosa',NULL,'','q63ZzyHs6NcBc4bqizZhTqy2q7KOLGDhflL2GB1dRwmGsl57q1SEwuQhoyeG','2015-05-25 03:58:58','2015-05-25 03:58:58',1,'Syiewa','http://pbs.twimg.com/profile_images/450900068724273152/IGbwH2oI_normal.jpeg',NULL,'63434803',NULL,NULL,NULL,NULL,NULL);
+insert  into `users`(`id`,`name`,`email`,`password`,`remember_token`,`created_at`,`updated_at`,`status`,`username`,`avatar`,`provider`,`provider_id`,`phone`,`mob_phone`,`city`,`province`,`address`) values (2,'admin','ada@ada.com','$2y$10$OK6MOdj89yFJ3rXiIb9vyO7aQrUgzQLNzM7Mx8MabcYI5OmDtWO2i','sFWSxayqpmBRtqhPUyp86hzdxFA1HXNUOzaZEnf3DpU9p0DRoUOsdEH6nQ5K','2015-05-19 03:00:32','2015-05-26 01:38:39',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(6,'test 12345','telo33@telo.com','',NULL,'2015-05-20 04:01:38','2015-05-20 04:08:00',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(9,'Wasi Arnosa','devil.syiewa@gmail.com','$2y$10$4xJ47eOcHvb.HqpAM32WxOG1CaufB5aryFP01kumUMJ8Xf.mc3uR6','BWV4b8k8EXXCVTi5CyFKFvykObLI0XyjFDUi3uf9x1fQyTh24jMMfmHTJYRO','2015-05-22 08:04:42','2015-05-26 01:55:21',1,NULL,'https://graph.facebook.com/v2.2/1044947206/picture?type=normal',NULL,'1044947206','1414141','114141',NULL,NULL,'address 1'),(10,'Wasi Arnosa',NULL,'','ISobhoKS8O3VjjyzrlQJw0sbyl8MKbDealJM630VgxdAqrXGEbgxy6XdVOfS','2015-05-25 03:58:58','2015-05-26 01:42:47',1,'Syiewa','http://pbs.twimg.com/profile_images/450900068724273152/IGbwH2oI_normal.jpeg',NULL,'63434803',NULL,NULL,NULL,NULL,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
