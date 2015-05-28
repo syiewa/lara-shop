@@ -15,6 +15,7 @@
 @endsection
 @section('js')
 <script src="{{asset('front/eshopper/js/jquery.autocomplete.min.js')}}"></script>
+@if(shipOption('enable_shipping') == 1)
 <script>
 $(document).ready(function() {
     var countries = [];
@@ -84,6 +85,21 @@ $(document).ready(function() {
     });
 });
 </script>
+@else
+<script>
+    simpleCart({
+        shippingFlatRate: 0,
+        checkout: {
+            type: "SendForm",
+            method: "POST",
+            url: "{{url('checkout/login')}}",
+            extra_data: {
+                _token: "{{csrf_token()}}",
+            }
+        }
+    });
+</script>
+@endif
 @endsection
 @section('main')
 <section id="cart_items">
@@ -108,6 +124,7 @@ $(document).ready(function() {
         </div>
         <div class="row">
             <div class="col-sm-6">
+                @if(shipOption('enable_shipping') == 1)
                 <div class="chose_area">
                     <!--                    <ul class="user_option">
                                             <li>
@@ -142,29 +159,20 @@ $(document).ready(function() {
                             </li>
                         </ul>
                         <div class="row" style="width: 500px; height: 50px; margin-left: 100px;">
-                            <div class="radio-inline">
-                                <label>
-                                    <input type="radio" name="courier" id="optionsRadios1" value="jne" checked>
-                                    JNE
-                                </label>
-                            </div>
-                            <div class="radio-inline">
-                                <label>
-                                    <input type="radio" name="courier" id="optionsRadios2" value="pos">
-                                    POS
-                                </label>
-                            </div>
-                            <div class="radio-inline">
-                                <label>
-                                    <input type="radio" name="courier" id="optionsRadios3" value="tiki">
-                                    TIKI
-                                </label>
-                            </div>
+                            @for($i=0;$i<sizeof($ship_method);$i++)
+                                <div class="radio-inline">
+                                    <label>
+                                        <input type="radio" name="courier" id="optionsRadios1" value="{{$ship_method[$i]}}" checked>
+                                        {{strtoupper($ship_method[$i])}}
+                                    </label>
+                                </div>
+                                @endfor
                         </div>
                         <ul class='user_option'>
 
                         </ul>
                 </div>
+                @endif
             </div>
             <div class="col-sm-6">
                 <div class="total_area">

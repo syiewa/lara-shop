@@ -55,6 +55,7 @@ class PageCtrl extends Controller {
 
     public function checkout() {
 //        dd(Request::all());
+        $this->data['ship_method'] = shipOption('shipping_method');
         return view('front.eshopper.pages.cart', $this->data);
     }
 
@@ -91,9 +92,9 @@ class PageCtrl extends Controller {
         $total = 0;
         for ($i = 1; $i <= $data['itemCount']; $i++) {
             $order['shipping'] = [
-                'service' => $data['service'],
-                'city' => $data['city'],
-                'province' => $data['province'],
+                'service' => isset($data['service']) ? $data['service'] : '',
+                'city' => isset($data['city']) ? $data['city'] : Auth::user()->city,
+                'province' => isset($data['province']) ? $data['city'] : Auth::user()->province,
                 'fee' => $data['shipping']
             ];
             $product_id = explode(',', str_replace(' ', '', $data['item_options_' . $i]));
@@ -118,8 +119,6 @@ class PageCtrl extends Controller {
 
     public function postShipping(ShippingRequest $request) {
         $input = $request->all();
-        $input['city'] = $order['city'];
-        $input['province'] = $order['province'];
         $user = User::find($input['user_id']);
         $order = Session::get('order');
         $order['user'] = $request->except('_token');

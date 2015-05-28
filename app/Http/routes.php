@@ -12,8 +12,34 @@
  */
 // Permission route
 Entrust::routeNeedsPermission('backend/*', ['backend'], redirect(''));
-Route::get('test',function(){
-   return 1; 
+Route::get('test', function() {
+    $url = 'http://fargosouthhighschool.rschoolteams.com/';
+    $apaya = [];
+    $client = new Goutte\Client();
+    $crawler = $client->request('GET', $url);
+    $client->getClient()->setDefaultOption('config/curl/' . CURLOPT_TIMEOUT, 60);
+    $activities = $crawler->filter('ul[class="dropdown-menu sub-menu"] > li[class="dropdown"]')->each(function ($node) {
+        $act = $node->filter('a[class="dropdown-toggle"]')->text();
+        $type = $node->filter('ul li a')->each(function($child) {
+            $url = 'http://fargosouthhighschool.rschoolteams.com/';
+            return ['sub' => trim($child->text()), 'url' => $url . '/' . $child->attr('href')];
+        });
+        $data[$act] = $type;
+        return [$act => $type];
+    });
+//    foreach ($activities as $key => $val) {
+//        foreach ($val as $taek => $kamp) {
+//            $apaya[$taek] = $kamp;
+//        }
+//    }
+//    $table = new Goutte\Client();
+//    foreach ($apaya as $key => $val) {
+//        foreach ($val as $url) {
+//            $batman = $table->request('GET', $url['url']);
+//            $table->getClient()->setDefaultOption('config/curl/' . CURLOPT_TIMEOUT, 60);
+//            dd($batman->filter('table[class="table table-bordered table-striped"]'));
+//        }
+//    }
 });
 Route::pattern('kumis', '.+');
 Route::get('backend', function() {
@@ -36,7 +62,7 @@ Route::get('logout', function() {
 });
 // Backend Route
 Route::group(['prefix' => 'backend'], function() {
-    // Route Products
+// Route Products
     Route::group(['namespace' => 'backend\Products'], function() {
 
         Route::resource('product', 'ProductCtrl');
@@ -44,7 +70,7 @@ Route::group(['prefix' => 'backend'], function() {
         Route::resource('image', 'ImageCtrl');
         Route::post('meta/product', ['as' => 'backend.product.meta', 'uses' => 'ProductCtrl@metaProduct']);
     });
-    // Page Route
+// Page Route
     Route::group(['namespace' => 'backend\Page'], function() {
         Route::resource('page', 'PageCtrl');
     });
@@ -54,7 +80,11 @@ Route::group(['prefix' => 'backend'], function() {
         Route::get('permission', ['as' => 'perm', 'uses' => 'RoleCtrl@getPerm']);
         Route::post('permission', ['as' => 'perm.post', 'uses' => 'RoleCtrl@storePerm']);
     });
-    // Widget Route
+// Options Route
+    Route::group(['namespace' => 'backend\Options'], function() {
+        Route::controller('options', 'OptionsCtrl');
+    });
+// Widget Route
     Route::group(['namespace' => 'backend\Widget'], function() {
         Route::resource('slideshow', 'SlideshowCtrl');
     });
@@ -91,8 +121,8 @@ Route::group(['namespace' => 'Front'], function() {
     Route::group(['prefix' => 'checkout'], function() {
         Route::post('login', 'PageCtrl@postcheckout');
         Route::get('shipping', 'PageCtrl@shipping');
-        Route::post('shipping','PageCtrl@postShipping');
-        Route::get('payment','PageCtrl@getPayment');
+        Route::post('shipping', 'PageCtrl@postShipping');
+        Route::get('payment', 'PageCtrl@getPayment');
     });
     Route::get('/product/{kumis}', 'PageCtrl@show');
     Route::get('/{kumis}', 'PageCtrl@show');

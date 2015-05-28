@@ -6,17 +6,41 @@
 @section('js')
 <script>
     $(document).ready(function() {
+        var province = "{{$order['shipping']['province']}}";
+        var city = "{{$order['shipping']['city']}}";
+        var enable_shipping = "{{shipOption('enable_shipping')}}";
         $.get('{{url("api/ongkir/province")}}', function(e) {
             $('#prov').html(e);
         }).done(function(e) {
-            $('#prov').val("{{$order['shipping']['province']}}")
-            $("#prov").prop("disabled", true);
+            $('#prov').val(province)
+            if (enable_shipping == '1') {
+                $("#prov").prop("disabled", true);
+            } else {
+                $("#prov").prop("disabled", false);
+            }
         });
-        $.get('{{url("api/ongkir/kota")}}/{{$order["province"]}}', function(e) {
+        $.get('{{url("api/ongkir/kota")}}/{{$order["shipping"]["province"]}}', function(e) {
             $('#city').html(e);
         }).done(function(e) {
-            $('#city').val("{{$order['shipping']['city']}}")
-            $("#city").prop("disabled", true);
+            $('#city').val(city);
+            if (enable_shipping == '1') {
+                $("#city").prop("disabled", true);
+            } else {
+                $("#city").prop("disabled", false);
+            }
+        });
+        $(document).on('change', '#prov', function(e) {
+            var prov_id = $(this).val();
+            $.get('{{url("api/ongkir/kota")}}/' + prov_id, function(e) {
+                $('#city').html(e);
+            }).done(function(e) {
+                $('#city').val(city);
+                if (enable_shipping == '1') {
+                    $("#city").prop("disabled", true);
+                } else {
+                    $("#city").prop("disabled", false);
+                }
+            });
         });
         $("#next").click(function(e) {
 
@@ -28,7 +52,9 @@
                 'name': $('#name').val(),
                 'address': $('#address').val(),
                 'phone': $('#phone').val(),
-                'mob_phone': $('#mob_phone').val()
+                'mob_phone': $('#mob_phone').val(),
+                'province': $('#prov').val(),
+                'city': $('#city').val(),
             };
             $.post('{{url("checkout/shipping")}}', data, function(e) {
                 if (e.success) {
@@ -44,6 +70,9 @@
                 alert += '</ul>';
                 $("#bahaya").html(alert);
             });
+        });
+        $('input[type="radio"][name="payment"]').change(function(e) {
+            alert(1);
         });
     });
 </script>
@@ -160,16 +189,16 @@
     </div>
     <div class="payment-options" style="margin-bottom: 50px;">
         <span>
-            <label><input type="radio" name='payment'> Direct Bank Transfer</label>
+            <label><input type="radio" name='payment' value="1"> Direct Bank Transfer</label>
         </span>
         <span>
-            <label><input type="radio" name='payment'> Check Payment</label>
+            <label><input type="radio" name='payment' value="2"> Check Payment</label>
         </span>
         <span>
-            <label><input type="radio" name='payment'> Credit Card</label>
+            <label><input type="radio" name='payment' value="3"> Credit Card</label>
         </span>
     </div>
-    <div class="payment-options">
+    <div class="payment-options" id="payment">
         <form class="form-horizontal" role="form">
             <fieldset>
                 <legend>Payment</legend>
