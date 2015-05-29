@@ -13,7 +13,7 @@
 // Permission route
 Entrust::routeNeedsPermission('backend/*', ['backend'], redirect(''));
 Route::get('test', function() {
-    $url = 'http://fargosouthhighschool.rschoolteams.com/';
+    $url = 'http://leesummithighschool.rschoolteams.com/';
     $apaya = [];
     $client = new Goutte\Client();
     $crawler = $client->request('GET', $url);
@@ -22,24 +22,37 @@ Route::get('test', function() {
         $act = $node->filter('a[class="dropdown-toggle"]')->text();
         $type = $node->filter('ul li a')->each(function($child) {
             $url = 'http://fargosouthhighschool.rschoolteams.com/';
-            return ['sub' => trim($child->text()), 'url' => $url . '/' . $child->attr('href')];
+            return ['sub' => trim($child->text()), 'url' => $url . $child->attr('href')];
         });
         $data[$act] = $type;
         return [$act => $type];
     });
-//    foreach ($activities as $key => $val) {
-//        foreach ($val as $taek => $kamp) {
-//            $apaya[$taek] = $kamp;
-//        }
-//    }
-//    $table = new Goutte\Client();
-//    foreach ($apaya as $key => $val) {
-//        foreach ($val as $url) {
-//            $batman = $table->request('GET', $url['url']);
-//            $table->getClient()->setDefaultOption('config/curl/' . CURLOPT_TIMEOUT, 60);
-//            dd($batman->filter('table[class="table table-bordered table-striped"]'));
-//        }
-//    }
+    foreach ($activities as $key => $val) {
+        foreach ($val as $taek => $kamp) {
+            $apaya[$taek] = $kamp;
+        }
+    }
+    $table = new Goutte\Client();
+    foreach ($apaya as $key => $val) {
+        foreach ($val as $url) {
+            $batman = $table->request('GET', $url['url']);
+            $table->getClient()->setDefaultOption('config/curl/' . CURLOPT_TIMEOUT, 60);
+            dd($batman->filter('table[class="table table-bordered table-striped"]'));
+        }
+    }
+});
+Route::get('as', function() {
+    $url = 'https://serve-ssl.rschooltoday.com/secure4/gkcsconference/g5-bin/setup.cgi?ssl=1&G5button=7&G5tab=1&G5location=internet';
+    $client = new Goutte\Client();
+    $crawler = $client->request('GET', $url);
+    $form = $crawler->selectButton('Login')->form(array(
+        'G5Login_username' => 'chad.hertzog',
+        'G5Login_password' => 'chad.hertzog',
+    ));
+    $crawler = $client->submit($form);
+    echo $crawler->html();
+    
+    
 });
 Route::pattern('kumis', '.+');
 Route::get('backend', function() {
@@ -74,6 +87,7 @@ Route::group(['prefix' => 'backend'], function() {
     Route::group(['namespace' => 'backend\Page'], function() {
         Route::resource('page', 'PageCtrl');
     });
+    // User route
     Route::group(['namespace' => 'backend\Users'], function() {
         Route::resource('user', 'UserCtrl');
         Route::resource('role', 'RoleCtrl');

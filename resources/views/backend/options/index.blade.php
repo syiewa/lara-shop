@@ -1,30 +1,74 @@
 @extends('backend/layouts/index')
 @section('css')
+<link href="{{asset('backend/plugins/fileinput/fileinput.min.css')}}" rel="stylesheet" type="text/css" />
 @endsection
 @section('js')
+<script src="{{asset('backend/plugins/fileinput/fileinput.min.js')}}" type="text/javascript"></script>
 <script>
-    $(document).ready(function() {
-        var ship = function() {
-            $.get("{{url('backend/options/shipindex')}}", function(data) {
-                $("#shipping").html(data);
-            });
+$(document).ready(function() {
+    var gen = function() {
+        $.get("{{url('backend/options/generalindex')}}", function(data) {
+            $("#general").html(data);
+        });
+    }
+    var ship = function() {
+        $.get("{{url('backend/options/shipindex')}}", function(data) {
+            $("#shipping").html(data);
+        });
+    }
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        var target = $(e.target).attr("href") // activated tab
+        switch (target) {
+            case '#general':
+                gen();
+                break;
+            case '#shipping':
+                ship();
+                break;
         }
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-            var target = $(e.target).attr("href") // activated tab
-            switch (target) {
-                case '#shipping':
-                    ship();
-                    break;
+    });
+    gen();
+    $(document).on('submit', '#form-ship', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('action');
+        $.post(url, $(this).serialize(), function(data) {
+            console.log(data);
+        });
+    });
+    $(document).on('submit', '#form-gen', function(e) {
+        e.preventDefault();
+        var fd = new FormData();
+        var url = $(this).attr('action');
+        var file = $('input[type=file]')[0].files[0];
+        if (file) {
+            fd.append('store_logo', file);
+        }
+        var other_data = $(this).serializeArray();
+        $.each(other_data, function(key, input) {
+            fd.append(input.name, input.value);
+        });
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(data, textStatus, jqXHR) {
+                console.log(data);
+            },
+            error: function(e) {
+                var alert = '';
+                alert += '<div class="alert alert-danger"><strong>Whoops!</strong> There were some problems with your input.<br><br>';
+                alert += '<ul>';
+                $.each(e.responseJSON, function(key, value) {
+                    alert += '<li>' + value + '</li>';
+                });
+                alert += '</ul>';
+                $("#bahaya").html(alert);
             }
         });
-        $(document).on('submit','#form-ship',function(e){
-            e.preventDefault();
-            var url = $(this).attr('action');
-            $.post(url,$(this).serialize(),function(data){
-               console.log(data); 
-            });
-        })
     })
+});
 </script>
 @endsection
 @section('content')
@@ -46,6 +90,8 @@
                     <h3 class="box-title">{{$title}}</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
+                    <div id="bahaya">
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             @if(count($errors))
@@ -61,8 +107,8 @@
                             <!-- Custom Tabs -->
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
-                                    <li><a href="#general" data-toggle="tab">General Options</a></li>
-                                    <li class="active"><a href="#shipping" data-toggle="tab">Shipping Option</a></li>
+                                    <li  class="active"><a href="#general" data-toggle="tab">General Options</a></li>
+                                    <li><a href="#shipping" data-toggle="tab">Shipping Option</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="general">

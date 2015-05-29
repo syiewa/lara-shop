@@ -29,6 +29,40 @@ CREATE TABLE `migrations` (
 
 insert  into `migrations`(`migration`,`batch`) values ('2014_10_12_000000_create_users_table',1),('2014_10_12_100000_create_password_resets_table',1),('2015_05_19_014556_entrust_setup_tables',1);
 
+/*Table structure for table `option_general` */
+
+DROP TABLE IF EXISTS `option_general`;
+
+CREATE TABLE `option_general` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `gen_store_name` varchar(255) DEFAULT NULL,
+  `gen_store_val` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+/*Data for the table `option_general` */
+
+insert  into `option_general`(`id`,`gen_store_name`,`gen_store_val`,`created_at`,`updated_at`) values (1,'store_url','http://www.opencart.com/','2015-05-29 12:58:43','2015-05-29 05:58:43'),(2,'store_name','adad','2015-05-29 12:58:44','2015-05-29 05:58:44'),(3,'store_owner','adad','2015-05-29 12:58:44','2015-05-29 05:58:44'),(4,'store_address','adad','2015-05-29 12:58:44','2015-05-29 05:58:44'),(5,'store_email','adadad@ada.com','2015-05-29 12:58:44','2015-05-29 05:58:44'),(6,'store_phone','adadad','2015-05-29 12:58:44','2015-05-29 05:58:44'),(7,'store_fax','adad','2015-05-29 12:58:45','2015-05-29 05:58:45'),(8,'store_logo','girl2.jpg','2015-05-29 12:58:45','2015-05-29 05:58:45');
+
+/*Table structure for table `option_shipping` */
+
+DROP TABLE IF EXISTS `option_shipping`;
+
+CREATE TABLE `option_shipping` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `ship_option_name` varchar(255) NOT NULL,
+  `ship_option_value` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+/*Data for the table `option_shipping` */
+
+insert  into `option_shipping`(`id`,`ship_option_name`,`ship_option_value`,`created_at`,`updated_at`) values (1,'enable_shipping','0','2015-05-27 10:10:35','2015-05-27 03:10:35'),(2,'shipping_method','jne,pos','2015-05-27 10:10:35','2015-05-27 03:10:35');
+
 /*Table structure for table `order` */
 
 DROP TABLE IF EXISTS `order`;
@@ -289,6 +323,22 @@ CREATE TABLE `slideshow` (
 
 insert  into `slideshow`(`id`,`ss_name`,`ss_description`,`ss_url`,`ss_status`,`created_at`,`updated_at`,`ss_order`,`ss_image`) values (1,'E-SHOPPER','Slideshow number 1<br>','http://lara.shop/backend/slideshow/create',1,'2015-05-19 01:32:17','2015-05-19 01:32:17',1,'e-shopper.jpg');
 
+/*Table structure for table `user_payment` */
+
+DROP TABLE IF EXISTS `user_payment`;
+
+CREATE TABLE `user_payment` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) DEFAULT NULL,
+  `payment_code` int(10) DEFAULT NULL,
+  `description` text,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `user_payment` */
+
 /*Table structure for table `users` */
 
 DROP TABLE IF EXISTS `users`;
@@ -317,7 +367,7 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`name`,`email`,`password`,`remember_token`,`created_at`,`updated_at`,`status`,`username`,`avatar`,`provider`,`provider_id`,`phone`,`mob_phone`,`city`,`province`,`address`) values (2,'admin','ada@ada.com','$2y$10$OK6MOdj89yFJ3rXiIb9vyO7aQrUgzQLNzM7Mx8MabcYI5OmDtWO2i','sFWSxayqpmBRtqhPUyp86hzdxFA1HXNUOzaZEnf3DpU9p0DRoUOsdEH6nQ5K','2015-05-19 03:00:32','2015-05-26 01:38:39',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(6,'test 12345','telo33@telo.com','',NULL,'2015-05-20 04:01:38','2015-05-20 04:08:00',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(9,'Wasi Arnosa','devil.syiewa@gmail.com','$2y$10$4xJ47eOcHvb.HqpAM32WxOG1CaufB5aryFP01kumUMJ8Xf.mc3uR6','BWV4b8k8EXXCVTi5CyFKFvykObLI0XyjFDUi3uf9x1fQyTh24jMMfmHTJYRO','2015-05-22 08:04:42','2015-05-26 01:55:21',1,NULL,'https://graph.facebook.com/v2.2/1044947206/picture?type=normal',NULL,'1044947206','1414141','114141',NULL,NULL,'address 1'),(10,'Wasi Arnosa',NULL,'','ISobhoKS8O3VjjyzrlQJw0sbyl8MKbDealJM630VgxdAqrXGEbgxy6XdVOfS','2015-05-25 03:58:58','2015-05-26 01:42:47',1,'Syiewa','http://pbs.twimg.com/profile_images/450900068724273152/IGbwH2oI_normal.jpeg',NULL,'63434803',NULL,NULL,NULL,NULL,NULL);
+insert  into `users`(`id`,`name`,`email`,`password`,`remember_token`,`created_at`,`updated_at`,`status`,`username`,`avatar`,`provider`,`provider_id`,`phone`,`mob_phone`,`city`,`province`,`address`) values (2,'admin','ada@ada.com','$2y$10$OK6MOdj89yFJ3rXiIb9vyO7aQrUgzQLNzM7Mx8MabcYI5OmDtWO2i','sFWSxayqpmBRtqhPUyp86hzdxFA1HXNUOzaZEnf3DpU9p0DRoUOsdEH6nQ5K','2015-05-19 03:00:32','2015-05-26 01:38:39',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(6,'test 12345','telo33@telo.com','',NULL,'2015-05-20 04:01:38','2015-05-20 04:08:00',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(9,'Wasi Arnosa','devil.syiewa@gmail.com','$2y$10$4xJ47eOcHvb.HqpAM32WxOG1CaufB5aryFP01kumUMJ8Xf.mc3uR6','lULeUHuJ8wU0XZQVhBxhFyylumjKEmHUwKd9Bu0vx6vKTTxGqUouRd0kT65x','2015-05-22 08:04:42','2015-05-29 01:35:01',1,NULL,'https://graph.facebook.com/v2.2/1044947206/picture?type=normal',NULL,'1044947206','1414141','114141','501','5','address 1'),(10,'Wasi Arnosa',NULL,'','ISobhoKS8O3VjjyzrlQJw0sbyl8MKbDealJM630VgxdAqrXGEbgxy6XdVOfS','2015-05-25 03:58:58','2015-05-26 01:42:47',1,'Syiewa','http://pbs.twimg.com/profile_images/450900068724273152/IGbwH2oI_normal.jpeg',NULL,'63434803',NULL,NULL,NULL,NULL,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

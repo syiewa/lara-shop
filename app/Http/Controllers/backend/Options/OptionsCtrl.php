@@ -4,9 +4,12 @@ namespace App\Http\Controllers\backend\Options;
 
 use App\Http\Controllers\Controller;
 use App\Models\Options\Shipping;
+use App\Models\Options\GeneralOption;
+use App\Http\Requests\backend\Options\GeneralRequest;
 use DB,
     Request,
-    Entrust;
+    Entrust,
+    Image;
 
 class OptionsCtrl extends Controller {
 
@@ -31,6 +34,25 @@ class OptionsCtrl extends Controller {
 //        }
         $this->data['sub_title'] = '';
         return view('backend.options.index', $this->data);
+    }
+
+    public function getGeneralindex() {
+        $this->data['general'] = GeneralOption::all();
+        return view('backend.options.general.index', $this->data);
+    }
+
+    public function postGeneralstore(GeneralRequest $request) {
+        $input = $request->except('_token', 'store_logo');
+        foreach ($input as $key => $val) {
+            GeneralOption::where('gen_store_name', $key)->update(['gen_store_val' => $val]);
+        }
+        $logo = public_path('images/store/');
+        if ($request->hasFile('store_logo')) {
+            $name = $request->file('store_logo')->getClientOriginalName();
+            GeneralOption::where('gen_store_name', 'store_logo')->update(['gen_store_val' => $name]);
+            Image::make($request->file('store_logo'))->save($logo . '/' . $name);
+        }
+        return response()->json(['success' => TRUE]);
     }
 
     public function getShipindex() {
