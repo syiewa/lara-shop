@@ -51,8 +51,6 @@ Route::get('as', function() {
     ));
     $crawler = $client->submit($form);
     echo $crawler->html();
-    
-    
 });
 Route::pattern('kumis', '.+');
 Route::get('backend', function() {
@@ -69,6 +67,7 @@ Route::get('login', ['as' => 'login.index', 'uses' => 'backend\LoginCtrl@index']
 Route::get('login/{provider?}', 'backend\LoginCtrl@auth');
 Route::get('account/{provider?}', 'backend\LoginCtrl@auth');
 Route::post('login', ['as' => 'do.login', 'uses' => 'backend\LoginCtrl@doLogin']);
+Route::post('register', ['as' => 'register', 'uses' => 'backend\LoginCtrl@postRegister']);
 Route::get('logout', function() {
     Auth::logout();
     return redirect('');

@@ -98,10 +98,11 @@
 <div class="col-sm-4">
     <div class="signup-form"><!--sign up form-->
         <h2>New User Signup!</h2>
-        <form action="#">
-            <input type="text" placeholder="Name"/>
-            <input type="email" placeholder="Email Address"/>
-            <input type="password" placeholder="Password"/>
+        <form action="{{route('register')}}" method="post">
+            <input type="hidden" name="_token" value="{{ csrf_token()}}">
+            <input type="text" placeholder="Name" name="name" value="{{old('name')}}"/>
+            <input type="email" placeholder="Email Address" name="email" value="{{old('email')}}"/>
+            <input type="password" placeholder="Password" name="password"/>
             <button type="submit" class="btn btn-default">Signup</button>
         </form>
     </div><!--/sign up form-->

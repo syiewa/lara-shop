@@ -21,7 +21,7 @@ class OngkirCtrl extends Controller {
                 CURLOPT_POSTFIELDS => $postdata,
                 CURLOPT_HTTPHEADER => array(
                     "content-type: application/x-www-form-urlencoded",
-                    "key: c32c3ab9158c2a7d8558d7787c2ca919"
+                    "key: " . shipOption('rajaongkir_key')
                 ),
             ));
         } else {
@@ -34,7 +34,7 @@ class OngkirCtrl extends Controller {
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "GET",
                 CURLOPT_HTTPHEADER => array(
-                    "key: c32c3ab9158c2a7d8558d7787c2ca919"
+                    "key: " . shipOption('rajaongkir_key')
                 ),
             ));
         }

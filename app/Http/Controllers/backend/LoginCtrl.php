@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Models\Users\User;
 use App\Http\Requests\backend\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\AuthenticateUser;
 use Request,
     Auth,
@@ -27,14 +28,27 @@ class LoginCtrl extends Controller {
     public function __construct() {
         if (Auth::check()) {
             if (Entrust::can(['backend'])) {
-                return redirect()->route('admin.product.index');
+                return redirect()->route('backend.product.index');
             }
+            return redirect('');
         }
     }
 
     public function index() {
         //
         return view('backend.login');
+    }
+
+    public function postRegister(RegisterRequest $request) {
+        $input = $request->all();
+        $input['status'] = 1;
+        $input['password'] = bcrypt($input['password']);
+        $user = new User($input);
+        if ($user->save()) {
+            $user->attachRole(5);
+            Auth::login($user);
+            return redirect('');
+        }
     }
 
     public function doLogin(LoginRequest $request) {
