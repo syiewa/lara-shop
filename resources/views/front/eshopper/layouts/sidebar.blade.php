@@ -9,7 +9,10 @@
                         @if(count($cat['children']) > 0)
                         <a data-toggle="collapse" data-parent="#accordian" href="#{{$cat['slug']}}">
                             <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                            {{$cat['name']}}
+                            {{$cat['name']}} 
+                            @if(shopOpt('category_product_count') == 1)
+                            <span class="label label-success pull-right">{{count($cat['children'])}}</span>
+                            @endif
                         </a>
                         @else
                         <h4 class="panel-title"><a href="{{url('product/'.$cat['slug'])}}">{{$cat['name']}}</a></h4>

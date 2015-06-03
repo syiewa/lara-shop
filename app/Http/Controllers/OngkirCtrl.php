@@ -71,9 +71,12 @@ class OngkirCtrl extends Controller {
         return view('front.eshopper.widget.kota', $this->data);
     }
 
-    public function getCity($provinceId = '', $cityId = '') {
+    public function getCity($cityId = '', $provinceId = '') {
         $data = $this->curl_get_content('http://rajaongkir.com/api/starter/city?id=' . $cityId . '&province=' . $provinceId);
         $city = json_decode($data, true);
+        if($cityId != ''){
+            return $city['rajaongkir']['results']['city_name'];
+        }
         $lookup = [];
         foreach ($city['rajaongkir']['results'] as $result) {
             $lookup[] = ['value' => $result['city_name'], 'data' => $result['city_id']];

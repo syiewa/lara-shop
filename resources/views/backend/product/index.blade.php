@@ -16,6 +16,7 @@ $(function() {
     var base_url = "{{url('backend/product/')}}";
     var public = "{{URL::asset('')}}";
     var proDt = $("#product-table").dataTable({
+        "iDisplayLength": "{{shopOpt('product_perpage_admin')}}",
         "sAjaxSource": "{{route('api.product')}}",
         "bServerSide": true,
         "bProcessing": true,

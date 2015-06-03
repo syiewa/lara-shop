@@ -20,13 +20,17 @@
 $(document).ready(function() {
     var countries = [];
     var service = '';
+    var city = "";
+    $.get('{{url("api/ongkir/city/".shipOption("shipping_from"))}}', function(e) {
+        city = e;
+    });
     $.get('{{url("api/ongkir/city")}}', function(e) {
         $('#city_asal').autocomplete({
             lookup: e,
             onSelect: function(suggestion) {
                 $('#city_asal_hid').val(suggestion.data);
             }
-        });
+        }).val(city);
         $('#city_tujuan').autocomplete({
             lookup: e,
             onSelect: function(suggestion) {
@@ -144,8 +148,8 @@ $(document).ready(function() {
                         <ul class="user_info">
                             <li class="single_field zip-field">
                                 <label>Kota asal:</label>
-                                <input type="text" id="city_asal" value="Yogyakarta" disabled/>
-                                <input type="hidden" name="origin" id="city_asal_hid" value="501"/>
+                                <input type="text" id="city_asal" value="" disabled/>
+                                <input type="hidden" name="origin" id="city_asal_hid" value="{{shipOption("shipping_from")}}"/>
                             </li>
                             <li class="single_field zip-field">
                                 <label>Kota Tujuan:</label>

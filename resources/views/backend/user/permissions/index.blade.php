@@ -54,6 +54,13 @@
                 @endforeach
             </tr>
             @endforeach
+            <tr>
+                <td><strong>Options</strong></td>
+                @foreach($roles as $role)
+                <?php $checked = $role->perms()->where('name', 'options')->count(); ?>
+                <td><input type="checkbox" value="options" name="{{$role->name}}[]" {{$checked > 0 ? 'checked' : ''}}></td>
+                @endforeach
+            </tr>
         </tbody>
     </table>
 </form>

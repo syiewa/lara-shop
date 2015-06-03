@@ -33,10 +33,18 @@
         </div>
     </div>
     @elseif($val->ship_option_name == 'rajaongkir_key')
-        <div class="form-group">
+    <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Raja Ongkir Key</label>
         <div class="col-sm-10">
             <input type="text" class="form-control" name='{{$val->ship_option_name}}' value="{{$val->ship_option_value}}">
+        </div>
+    </div>
+    @elseif($val->ship_option_name == 'shipping_from')
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">Shipping From</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="city_asal">
+            <input type="hidden" name='{{$val->ship_option_name}}' value="{{$val->ship_option_value}}" id="city_asal_hid" />
         </div>
     </div>
     @endif

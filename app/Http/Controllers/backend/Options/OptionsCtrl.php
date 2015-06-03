@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Options\Shipping;
 use App\Models\Options\GeneralOption;
 use App\Http\Requests\backend\Options\GeneralRequest;
+use App\Models\Options\ShopOption;
+use App\Http\Requests\backend\Options\ShopRequest;
 use DB,
     Request,
     Entrust,
@@ -33,6 +35,7 @@ class OptionsCtrl extends Controller {
 //            return redirect('');
 //        }
         $this->data['sub_title'] = '';
+        $this->data['city'] = Shipping::where('ship_option_name', 'shipping_from')->first()->ship_option_value;
         return view('backend.options.index', $this->data);
     }
 
@@ -72,12 +75,19 @@ class OptionsCtrl extends Controller {
         }
     }
 
-    public function getShipedit($id) {
-        
+    public function getShopindex() {
+        $this->data['shop'] = ShopOption::all();
+        return view('backend.options.shop.index', $this->data);
     }
 
-    public function putShipupdate() {
-        
+    public function postShopstore(ShopRequest $request) {
+        $input = $request->except('_token');
+        foreach ($input as $key => $val) {
+            $shop = ShopOption::where('shop_opt_name', $key)->update(['shop_opt_value' => $val]);
+        }
+        if ($shop) {
+            return response()->json(['success' => TRUE]);
+        }
     }
 
 }

@@ -25,8 +25,22 @@ function SetAttr($array = []) {
 function shipOption($key = '') {
     $data = App\Models\Options\Shipping::where('ship_option_name', $key)->first();
     if ($key == 'shipping_method') {
-        $method = explode(',',$data->ship_option_value);
+        $method = explode(',', $data->ship_option_value);
         return $method;
     }
     return $data->ship_option_value;
+}
+
+function genOpt($key = '') {
+    $data = App\Models\Options\GeneralOption::where('gen_store_name', $key)->first();
+    if ($data) {
+        return $data->gen_store_val;
+    }
+}
+
+function shopOpt($key = '') {
+    $data = App\Models\Options\ShopOption::where('shop_opt_name', $key)->first();
+    if ($data) {
+        return $data->shop_opt_value;
+    }
 }

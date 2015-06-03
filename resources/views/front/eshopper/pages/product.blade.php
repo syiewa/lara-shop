@@ -45,11 +45,13 @@
                 @if($product->attribute->count())
                 {!!setAttr($product->attribute)!!}
                 @endif
+                @if(shopOpt('display_mode') == 0)
                 <span>
                     <label>Quantity:</label>
                     <input type="text" class="item_quantity" value="3">
                     <button class="item_add btn btn-fefault cart" value="add to cart">Add to Cart </button>
                 </span>
+                @endif
 <!--                <p><b>Availability:</b> In Stock</p>
             <p><b>Condition:</b> New</p>
             <p><b>Brand:</b> E-SHOPPER</p>-->

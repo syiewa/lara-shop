@@ -4,14 +4,14 @@
     <section class="sidebar">
         <!-- Sidebar user panel -->
         <div class="user-panel">
-            <div class="pull-left image">
+<!--            <div class="pull-left image">
                 <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
+                <p></p>
 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-            </div>
+            </div>-->
         </div>
         <!--         search form 
                 <form action="#" method="get" class="sidebar-form">
@@ -96,14 +96,10 @@
                 </ul>
             </li>
             <li class="treeview">
-                <a href="#">
+                <a href="{{url('backend/options')}}">
                     <i class="fa fa-files-o"></i>
-                    <span>Options</span><i class="fa fa-angle-left pull-right"></i>
+                    <span>Options</span></i>
                 </a>
-                <ul class="treeview-menu">
-                    <li><a href="{{url('backend/options')}}"><i class="fa fa-circle-o"></i>General Options</a></li>
-                    <li><a href="{{route('backend.page.create')}}"><i class="fa fa-plus"></i>Shop Options</a></li>
-                </ul>
             </li>
             <li>
                 <a href="{{url('')}}" target="_blank">

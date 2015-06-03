@@ -1,11 +1,24 @@
 @extends('backend/layouts/index')
 @section('css')
 <link href="{{asset('backend/plugins/fileinput/fileinput.min.css')}}" rel="stylesheet" type="text/css" />
+<style>
+    .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+    .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+    .autocomplete-selected { background: #F0F0F0; }
+    .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+    .autocomplete-group { padding: 2px 5px; }
+    .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+</style>
 @endsection
 @section('js')
+<script src="{{asset('front/eshopper/js/jquery.autocomplete.min.js')}}"></script>
 <script src="{{asset('backend/plugins/fileinput/fileinput.min.js')}}" type="text/javascript"></script>
 <script>
 $(document).ready(function() {
+    var city = '';
+    $.get('{{url("api/ongkir/city/".$city)}}', function(e) {
+        city = e;
+    });
     var gen = function() {
         $.get("{{url('backend/options/generalindex')}}", function(data) {
             $("#general").html(data);
@@ -14,6 +27,21 @@ $(document).ready(function() {
     var ship = function() {
         $.get("{{url('backend/options/shipindex')}}", function(data) {
             $("#shipping").html(data);
+
+        }).done(function() {
+            $.get('{{url("api/ongkir/city")}}', function(e) {
+                $('#city_asal').autocomplete({
+                    lookup: e,
+                    onSelect: function(suggestion) {
+                        $('#city_asal_hid').val(suggestion.data);
+                    }
+                }).val(city);
+            });
+        });
+    }
+    var shop = function() {
+        $.get("{{url('backend/options/shopindex')}}", function(data) {
+            $("#shop").html(data);
         });
     }
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
@@ -25,6 +53,9 @@ $(document).ready(function() {
             case '#shipping':
                 ship();
                 break;
+            case '#shop':
+                shop();
+                break;
         }
     });
     gen();
@@ -32,7 +63,35 @@ $(document).ready(function() {
         e.preventDefault();
         var url = $(this).attr('action');
         $.post(url, $(this).serialize(), function(data) {
-            console.log(data);
+        }).fail(function(fail) {
+            if (fail.status === 422) {
+                var alert = '';
+                alert += '<div class="alert alert-danger"><strong>Whoops!</strong> There were some problems with your input.<br><br>';
+                alert += '<ul>';
+                $.each(fail.responseJSON, function(key, value) {
+                    alert += '<li>' + value + '</li>';
+                });
+                alert += '</ul>';
+                $("#bahaya").html(alert);
+            }
+        });
+    });
+    $(document).on('submit', '#form-shop', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('action');
+        $.post(url, $(this).serialize(), function(data) {
+        }).fail(function(fail) {
+            if (fail.status === 422) {
+                var alert = '';
+                alert += '<div class="alert alert-danger"><strong>Whoops!</strong> There were some problems with your input.<br><br>';
+                alert += '<ul>';
+                $.each(fail.responseJSON, function(key, value) {
+                    alert += '<li>' + value + '</li>';
+                });
+                alert += '</ul>';
+                $("#bahaya").html(alert);
+            }
+
         });
     });
     $(document).on('submit', '#form-gen', function(e) {
@@ -54,17 +113,18 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             success: function(data, textStatus, jqXHR) {
-                console.log(data);
             },
             error: function(e) {
-                var alert = '';
-                alert += '<div class="alert alert-danger"><strong>Whoops!</strong> There were some problems with your input.<br><br>';
-                alert += '<ul>';
-                $.each(e.responseJSON, function(key, value) {
-                    alert += '<li>' + value + '</li>';
-                });
-                alert += '</ul>';
-                $("#bahaya").html(alert);
+                if (fail.status === 422) {
+                    var alert = '';
+                    alert += '<div class="alert alert-danger"><strong>Whoops!</strong> There were some problems with your input.<br><br>';
+                    alert += '<ul>';
+                    $.each(e.responseJSON, function(key, value) {
+                        alert += '<li>' + value + '</li>';
+                    });
+                    alert += '</ul>';
+                    $("#bahaya").html(alert);
+                }
             }
         });
     })
@@ -109,12 +169,16 @@ $(document).ready(function() {
                                 <ul class="nav nav-tabs">
                                     <li  class="active"><a href="#general" data-toggle="tab">General Options</a></li>
                                     <li><a href="#shipping" data-toggle="tab">Shipping Option</a></li>
+                                    <li><a href="#shop" data-toggle="tab">Shop Option</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="general">
 
                                     </div><!-- /.tab-pane -->
                                     <div class="tab-pane active" id="shipping">
+
+                                    </div><!-- /.tab-pane -->
+                                    <div class="tab-pane active" id="shop">
 
                                     </div><!-- /.tab-pane -->
                                 </div><!-- /.tab-content -->

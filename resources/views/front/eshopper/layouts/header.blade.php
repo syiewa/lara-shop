@@ -5,8 +5,8 @@
                 <div class="col-sm-6">
                     <div class="contactinfo">
                         <ul class="nav nav-pills">
-                            <li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-                            <li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+                            <li><a href="#"><i class="fa fa-phone"></i>{{genOpt('store_phone')}}</a></li>
+                            <li><a href="#"><i class="fa fa-envelope"></i> {{genOpt('store_email')}}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="logo pull-left">
-                        <a href="index.html"><img src="{{asset('front/eshopper/images/home/logo.png')}}" alt="" /></a>
+                        <a href="{{genOpt('store_url')}}"><img src="{{asset('front/eshopper/images/home/logo.png')}}" alt="" /></a>
                     </div>
                     <div class="btn-group pull-right">
                         <!--                        <div class="btn-group">
@@ -61,10 +61,11 @@
                         <ul class="nav navbar-nav">
                             @if (Auth::check())
                             <li><a href="{{url('customer/account')}}"><i class="fa fa-user"></i> Account</a></li>
-                            <li><a href="{{url('logout')}}"><i class="fa fa-lock"></i> Logout</a></li>
+                            <li><a href="{{url('logout')}}" id="logout"><i class="fa fa-lock"></i> Logout</a></li>
                             @else
                             <li><a href="{{url('customer/login')}}"><i class="fa fa-lock"></i> Login</a></li>
                             @endif
+                            @if(shopOpt('display_mode') == 0)
                             <li><ul class="nav navbar-nav navbar-right">
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="glyphicon glyphicon-shopping-cart"></span> <span class="simpleCart_total"></span> - <span id="simpleCart_quantity" class="simpleCart_quantity"></span> Items<span class="caret"></span></a>
@@ -77,6 +78,7 @@
                                     </li>
                                 </ul>
                             </li>
+                            @endif
                         </ul>
                     </div>
                 </div>

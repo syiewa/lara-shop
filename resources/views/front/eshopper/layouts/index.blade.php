@@ -73,7 +73,9 @@
         @include('front.eshopper.layouts.header',['mtop'=>$mtop])
         @show
         @section('slider')
+        @if(shopOpt('enable_slideshow') == 1)
         @include('front.eshopper.widget.slider',$slideshow)
+        @endif
         @show
 
         <section>
@@ -193,6 +195,12 @@ $('#etalage').etalage({
     click_callback: function(image_anchor, instance_id) {
         alert('Callback example:\nYou clicked on an image with the anchor: "' + image_anchor + '"\n(in Etalage instance: "' + instance_id + '")');
     }
+});
+$("#logout").click(function(e) {
+    e.preventDefault();
+    simpleCart.empty();
+    anotherCart.empty();
+    return window.location.replace("{{url('logout')}}");
 });
 
         </script>
