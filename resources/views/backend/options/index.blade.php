@@ -44,6 +44,11 @@ $(document).ready(function() {
             $("#shop").html(data);
         });
     }
+    var mail = function() {
+        $.get("{{url('backend/options/mailindex')}}", function(data) {
+            $("#mail").html(data);
+        });
+    }
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         var target = $(e.target).attr("href") // activated tab
         switch (target) {
@@ -55,6 +60,9 @@ $(document).ready(function() {
                 break;
             case '#shop':
                 shop();
+                break;
+            case '#mail':
+                mail();
                 break;
         }
     });
@@ -77,6 +85,24 @@ $(document).ready(function() {
         });
     });
     $(document).on('submit', '#form-shop', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('action');
+        $.post(url, $(this).serialize(), function(data) {
+        }).fail(function(fail) {
+            if (fail.status === 422) {
+                var alert = '';
+                alert += '<div class="alert alert-danger"><strong>Whoops!</strong> There were some problems with your input.<br><br>';
+                alert += '<ul>';
+                $.each(fail.responseJSON, function(key, value) {
+                    alert += '<li>' + value + '</li>';
+                });
+                alert += '</ul>';
+                $("#bahaya").html(alert);
+            }
+
+        });
+    });
+    $(document).on('submit','#form-mail', function(e) {
         e.preventDefault();
         var url = $(this).attr('action');
         $.post(url, $(this).serialize(), function(data) {
@@ -138,7 +164,7 @@ $(document).ready(function() {
         {{$title}}
         <small>{{$sub_title}}</small>
     </h1>
-    {!! Breadcrumbs::render('productcreate') !!}
+    {!! Breadcrumbs::render('options') !!}
 </section>
 
 <section class="content">
@@ -170,6 +196,7 @@ $(document).ready(function() {
                                     <li  class="active"><a href="#general" data-toggle="tab">General Options</a></li>
                                     <li><a href="#shipping" data-toggle="tab">Shipping Option</a></li>
                                     <li><a href="#shop" data-toggle="tab">Shop Option</a></li>
+                                    <li><a href="#mail" data-toggle="tab">Mail Option</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="general">
@@ -179,6 +206,9 @@ $(document).ready(function() {
 
                                     </div><!-- /.tab-pane -->
                                     <div class="tab-pane active" id="shop">
+
+                                    </div><!-- /.tab-pane -->
+                                    <div class="tab-pane active" id="mail">
 
                                     </div><!-- /.tab-pane -->
                                 </div><!-- /.tab-content -->

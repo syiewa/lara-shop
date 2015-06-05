@@ -1,9 +1,6 @@
-@extends('front.eshopper.layouts.index')
-@section('slider')
-@overwrite
-@section('sidebar')
-@overwrite
-@section('main')
+@extends('app')
+
+@section('content')
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">

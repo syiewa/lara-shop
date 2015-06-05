@@ -8,6 +8,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Auth;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -27,14 +28,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password','status','username','avatar','provider','provider_id','address','city','province','phone','mob_phone'];
+    protected $fillable = ['name', 'email', 'password', 'status', 'username', 'avatar', 'provider', 'provider_id', 'address', 'city', 'province', 'phone', 'mob_phone','activation_code'];
 
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'activation_code'];
     protected $appends = ['is_active'];
 
     public function getIsActiveAttribute() {
@@ -43,6 +44,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             return '<i class="label label-success">Active</i>';
         }
         return '<i class="label label-default">In-Active</i>';
+    }
+
+    public function accountIsActive($code) {
+        $user = User::where('activation_code', '=', $code)->first();
+        $user->status = 1;
+        $user->activation_code = '';
+        if ($user->save()) {
+            Auth::login($user);
+        }
+        return true;
     }
 
 //    public function scopeDtUser($query) {

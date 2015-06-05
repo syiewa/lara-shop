@@ -76,3 +76,7 @@ Breadcrumbs::register('slideshowedit', function($breadcrumbs) {
     $breadcrumbs->parent('slideshow');
     $breadcrumbs->push('Edit Slideshow', route('backend.slideshow.edit'));
 });
+Breadcrumbs::register('options', function($breadcrumbs) {
+    $breadcrumbs->parent('home');
+    $breadcrumbs->push('Options', url('backend/options'));
+});

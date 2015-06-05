@@ -8,9 +8,9 @@
         <!-- Bootstrap 3.3.2 -->
         <link href="{{asset('backend/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />    
         <!-- FontAwesome 4.3.0 -->
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{asset('backend/plugins/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- Ionicons 2.0.0 -->
-        <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />    
+        <link href="{{asset('backend/plugins/ionicons/ionicons.min.css')}}" rel="stylesheet" type="text/css" />    
         <!-- Theme style -->
         <link href="{{asset('backend/dist/css/AdminLTE.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- AdminLTE Skins. Choose a skin from the css/skins 
@@ -21,8 +21,8 @@
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+            <script src="{{asset('backend/plugins/html5shiv.js')}}"></script>
+            <script src="{{asset('backend/plugins/respond.min.js')}}"></script>
         <![endif]-->
 
     </head>
@@ -47,7 +47,7 @@
 
         <!-- jQuery 2.1.3 -->
         <script src="{{asset('backend/plugins/jQuery/jQuery-2.1.3.min.js')}}"></script>
-        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+        <script src="{{asset('backend/plugins/jQueryUI/jquery-ui.min.js')}}"></script>
         <!-- Bootstrap 3.3.2 JS -->
         <script src="{{asset('backend/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>  
         <script src="{{asset('backend/plugins/blockui/jquery.blockUI.js')}}" type="text/javascript"></script>  

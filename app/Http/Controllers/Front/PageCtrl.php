@@ -16,11 +16,7 @@ use Session,
 class PageCtrl extends Controller {
 
     public function __construct() {
-        $this->data['categories'] = Products\Category::where('status', '!=', 0)->GetNested();
-        $this->data['products'] = Products\Product::where('product_status', '!=', 0)->take(shopOpt('product_perpage_front'))->get();
-        $this->data['mtop'] = Page\Page::where('page_status', 1)->where('page_position', '=', 'top')->GetNested('top');
-        $this->data['mbottom'] = Page\Page::where('page_status', 1)->where('page_position', '=', 'bottom')->GetNested('bottom');
-        $this->data['slideshow'] = Widget\Slideshow::where('ss_status', 1)->orderBy('ss_order')->get();
+        parent::__construct();
     }
 
     /**
@@ -31,6 +27,16 @@ class PageCtrl extends Controller {
     public function index() {
         //
         return view('front.eshopper.pages.home', $this->data);
+    }
+
+    public function registerSuccess() {
+        return view('front.eshopper.pages.postRegister',$this->data);
+    }
+
+    public function activateAccount($code, User $user) {
+        if ($user->accountIsActive($code)) {
+            return view('front.eshopper.pages.activated', $this->data);
+        }
     }
 
     public function show($slug) {

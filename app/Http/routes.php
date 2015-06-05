@@ -12,6 +12,24 @@
  */
 // Permission route
 Entrust::routeNeedsPermission('backend/*', ['backend'], redirect(''));
+Route::get('mail', function() {
+    // Variable data ini yang berupa array ini akan bisa diakses di dalam "view".
+    $data = ['prize' => 'Peke', 'total' => 3];
+
+    // "emails.hello" adalah nama view.
+    Mail::send('emails.hello', $data, function ($mail) {
+        // Email dikirimkan ke address "momo@deviluke.com" 
+        // dengan nama penerima "Momo Velia Deviluke"
+        $mail->to('momo@deviluke', 'Momo Velia Deviluke');
+
+        // Copy carbon dikirimkan ke address "haruna@sairenji" 
+        // dengan nama penerima "Haruna Sairenji"
+        $mail->cc('haruna@sairenji', 'Haruna Sairenji');
+
+        $mail->subject('Hello World!');
+    });
+});
+
 Route::get('test', function() {
     $url = 'http://leesummithighschool.rschoolteams.com/';
     $apaya = [];
@@ -68,10 +86,12 @@ Route::get('login/{provider?}', 'backend\LoginCtrl@auth');
 Route::get('account/{provider?}', 'backend\LoginCtrl@auth');
 Route::post('login', ['as' => 'do.login', 'uses' => 'backend\LoginCtrl@doLogin']);
 Route::post('register', ['as' => 'register', 'uses' => 'backend\LoginCtrl@postRegister']);
+Route::get('register/success',['as' => 'register.success', 'uses' => 'Front\PageCtrl@registerSuccess']);
 Route::get('logout', function() {
     Auth::logout();
     return redirect('');
 });
+Route::get('activated/{code}', 'Front\PageCtrl@activateAccount');
 // Backend Route
 Route::group(['prefix' => 'backend'], function() {
 // Route Products

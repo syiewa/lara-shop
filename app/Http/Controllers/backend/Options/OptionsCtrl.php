@@ -7,6 +7,7 @@ use App\Models\Options\Shipping;
 use App\Models\Options\GeneralOption;
 use App\Http\Requests\backend\Options\GeneralRequest;
 use App\Models\Options\ShopOption;
+use App\Models\Options\MailOption;
 use App\Http\Requests\backend\Options\ShopRequest;
 use DB,
     Request,
@@ -53,7 +54,7 @@ class OptionsCtrl extends Controller {
         if ($request->hasFile('store_logo')) {
             $name = $request->file('store_logo')->getClientOriginalName();
             GeneralOption::where('gen_store_name', 'store_logo')->update(['gen_store_val' => $name]);
-            Image::make($request->file('store_logo'))->save($logo . '/' . $name);
+            Image::make($request->file('store_logo'))->resize('139', '39')->save($logo . '/' . $name);
         }
         return response()->json(['success' => TRUE]);
     }
@@ -86,6 +87,21 @@ class OptionsCtrl extends Controller {
             $shop = ShopOption::where('shop_opt_name', $key)->update(['shop_opt_value' => $val]);
         }
         if ($shop) {
+            return response()->json(['success' => TRUE]);
+        }
+    }
+
+    public function getMailindex() {
+        $this->data['mail'] = MailOption::lists('mail_value', 'mail_key');
+        return view('backend.options.mail.index', $this->data);
+    }
+
+    public function postMailstore() {
+        $input = Request::except('_token');
+        foreach ($input as $key => $val) {
+            $ship = MailOption::where('mail_key', $key)->update(['mail_value' => $val]);
+        }
+        if ($ship) {
             return response()->json(['success' => TRUE]);
         }
     }

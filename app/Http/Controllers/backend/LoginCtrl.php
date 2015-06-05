@@ -11,8 +11,10 @@ use Request,
     Auth,
     Exception,
     Entrust,
-    Socialize;
+    Socialize,
+    Mail;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Contracts\Auth\PasswordBroker;
 
 class LoginCtrl extends Controller {
 
@@ -25,7 +27,9 @@ class LoginCtrl extends Controller {
      *
      * @return Response
      */
-    public function __construct() {
+    public function __construct(PasswordBroker $passwords) {
+        $this->passwords = $passwords;
+        parent::__construct();
         if (Auth::check()) {
             if (Entrust::can(['backend'])) {
                 return redirect()->route('backend.product.index');
@@ -34,8 +38,20 @@ class LoginCtrl extends Controller {
         }
     }
 
+    public function getEmail() {
+        return view('auth.password', $this->data);
+    }
+
+    public function getReset($token = null) {
+        if (is_null($token)) {
+            throw new NotFoundHttpException;
+        }
+
+        return view('auth.reset', $this->data)->with('token', $token);
+    }
+
     public function index() {
-        //
+//
         return view('backend.login');
     }
 
@@ -43,11 +59,19 @@ class LoginCtrl extends Controller {
         $input = $request->all();
         $input['status'] = 1;
         $input['password'] = bcrypt($input['password']);
+        $input['activation_code'] = str_random(60) . $input['email'];
         $user = new User($input);
         if ($user->save()) {
+            $data = array(
+                'name' => $user->name,
+                'code' => $input['activation_code'],
+            );
+            Mail::queue('emails.hello', $data, function($message) use ($user) {
+                $message->from('no-reply@lara.shop', 'No Reply');
+                $message->to($user->email, 'Please activate your account.');
+            });
             $user->attachRole(5);
-            Auth::login($user);
-            return redirect('');
+            return redirect()->route('register.success');
         }
     }
 
@@ -91,10 +115,10 @@ class LoginCtrl extends Controller {
         return Socialize::with($provider)->redirect();
     }
 
-    // to get authenticate user data
+// to get authenticate user data
     public function account($provider) {
         $user = Socialize::with($provider)->user();
-        // Do your stuff with user data.
+// Do your stuff with user data.
         print_r($user);
         die;
     }
@@ -108,57 +132,4 @@ class LoginCtrl extends Controller {
      *
      * @return Response
      */
-    public function create() {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store() {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id) {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id) {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update($id) {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id) {
-        //
-    }
-
 }

@@ -78,7 +78,7 @@
                 <div class="form-group">
                     <label class="sr-only" for="exampleInputPassword2">Password</label>
                     <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" name="password" required>
-                    <div class="help-block text-right"><a href="{{url('password/reset')}}">Forget the password ?</a></div>
+                    <div class="help-block text-right"><a href="{{url('password/email')}}">Forget the password ?</a></div>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">Sign in</button>
