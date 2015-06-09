@@ -69,6 +69,16 @@
     </head><!--/head-->
 
     <body>
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id))
+                    return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3&appId=1374445972820863";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
         @section('header')
         @include('front.eshopper.layouts.header',['mtop'=>$mtop])
         @show
@@ -112,96 +122,96 @@
         <script src="{{asset('front/eshopper/js/main.js')}}"></script>
         <script src="{{asset('front/eshopper/js/simpleCart.js')}}"></script>
         <script>
-var data2 = [
-    {view: "image", attr: "thumb", label: false},
-    {attr: "productid", label: "ID"},
-    /* Name */
-    {attr: "name", label: "Product"},
-    /* Quantity */
-    {attr: "quantity", label: "Qty"},
-    /* Price */
-    {attr: "price", label: "Price", view: 'currency'},
-    {view: function(item, column) {
-            var str = '';
-            var telo = item.get('options');
-            for (var key in telo) {
-                if (key !== 'productid' && key !== 'thumb') {
-                    str += key + ' : ' + telo[key] + '<br />';
+            var data2 = [
+                {view: "image", attr: "thumb", label: false},
+                {attr: "productid", label: "ID"},
+                /* Name */
+                {attr: "name", label: "Product"},
+                /* Quantity */
+                {attr: "quantity", label: "Qty"},
+                /* Price */
+                {attr: "price", label: "Price", view: 'currency'},
+                {view: function(item, column) {
+                        var str = '';
+                        var telo = item.get('options');
+                        for (var key in telo) {
+                            if (key !== 'productid' && key !== 'thumb') {
+                                str += key + ' : ' + telo[key] + '<br />';
+                            }
+                        }
+                        return str;
+
+                    }, label: 'Options'},
+                /* Remove */
+            ];
+            var data = [
+                {view: "image", attr: "thumb", label: false},
+                {attr: "productid", label: "ID"},
+                /* Name */
+                {attr: "name", label: "Product"},
+                /* Quantity */
+                {attr: "quantity", label: "Qty"},
+                /* Price */
+                {attr: "price", label: "Price", view: 'currency'},
+                {view: function(item, column) {
+                        var str = '';
+                        var telo = item.get('options');
+                        for (var key in telo) {
+                            if (key !== 'productid' && key !== 'thumb') {
+                                str += key + ' : ' + telo[key] + '<br />';
+                            }
+                        }
+                        return str;
+
+                    }, label: 'Options'},
+                /* Remove */
+            ];
+            data2.push({view: "remove", text: "Remove", label: false})
+            simpleCart({
+                cartStyle: "table",
+                cartColumns: data2,
+                shippingFlatRate: 0,
+            });
+            simpleCart.currency({
+                code: "IDR",
+                name: "Rupiah",
+                symbol: "Rp. ",
+                delimiter: ".",
+                after: false,
+                accuracy: 0
+            });
+            var anotherCart = simpleCart.copy("anotherCart");
+            anotherCart({
+                cartStyle: "table",
+                cartColumns: data,
+                shippingFlatRate: 0,
+            });
+            anotherCart.currency({
+                code: "IDR",
+                name: "Rupiah",
+                symbol: "Rp. ",
+                delimiter: ".",
+                after: false,
+                accuracy: 0
+            });
+            simpleCart.bind('beforeRemove', function(item) {
+                anotherCart.find(item.get('id')).remove();
+            });
+
+            $('#etalage').etalage({
+                thumb_image_width: 300,
+                thumb_image_height: 400,
+                show_hint: true,
+                click_callback: function(image_anchor, instance_id) {
+                    alert('Callback example:\nYou clicked on an image with the anchor: "' + image_anchor + '"\n(in Etalage instance: "' + instance_id + '")');
                 }
-            }
-            return str;
-
-        }, label: 'Options'},
-    /* Remove */
-];
-var data = [
-    {view: "image", attr: "thumb", label: false},
-    {attr: "productid", label: "ID"},
-    /* Name */
-    {attr: "name", label: "Product"},
-    /* Quantity */
-    {attr: "quantity", label: "Qty"},
-    /* Price */
-    {attr: "price", label: "Price", view: 'currency'},
-    {view: function(item, column) {
-            var str = '';
-            var telo = item.get('options');
-            for (var key in telo) {
-                if (key !== 'productid' && key !== 'thumb') {
-                    str += key + ' : ' + telo[key] + '<br />';
-                }
-            }
-            return str;
-
-        }, label: 'Options'},
-    /* Remove */
-];
-data2.push({view: "remove", text: "Remove", label: false})
-simpleCart({
-    cartStyle: "table",
-    cartColumns: data2,
-    shippingFlatRate: 0,
-});
-simpleCart.currency({
-    code: "IDR",
-    name: "Rupiah",
-    symbol: "Rp. ",
-    delimiter: ".",
-    after: false,
-    accuracy: 0
-});
-var anotherCart = simpleCart.copy("anotherCart");
-anotherCart({
-    cartStyle: "table",
-    cartColumns: data,
-    shippingFlatRate: 0,
-});
-anotherCart.currency({
-    code: "IDR",
-    name: "Rupiah",
-    symbol: "Rp. ",
-    delimiter: ".",
-    after: false,
-    accuracy: 0
-});
-simpleCart.bind('beforeRemove', function(item) {
-    anotherCart.find(item.get('id')).remove();
-});
-
-$('#etalage').etalage({
-    thumb_image_width: 300,
-    thumb_image_height: 400,
-    show_hint: true,
-    click_callback: function(image_anchor, instance_id) {
-        alert('Callback example:\nYou clicked on an image with the anchor: "' + image_anchor + '"\n(in Etalage instance: "' + instance_id + '")');
-    }
-});
-$("#logout").click(function(e) {
-    e.preventDefault();
-    simpleCart.empty();
-    anotherCart.empty();
-    return window.location.replace("{{url('logout')}}");
-});
+            });
+            $("#logout").click(function(e) {
+                e.preventDefault();
+                simpleCart.empty();
+                anotherCart.empty();
+                return window.location.replace("{{url('logout')}}");
+            });
 
         </script>
         @section('js')

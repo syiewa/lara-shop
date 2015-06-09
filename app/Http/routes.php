@@ -12,22 +12,84 @@
  */
 // Permission route
 Entrust::routeNeedsPermission('backend/*', ['backend'], redirect(''));
-Route::get('mail', function() {
-    // Variable data ini yang berupa array ini akan bisa diakses di dalam "view".
-    $data = ['prize' => 'Peke', 'total' => 3];
 
-    // "emails.hello" adalah nama view.
-    Mail::send('emails.hello', $data, function ($mail) {
-        // Email dikirimkan ke address "momo@deviluke.com" 
-        // dengan nama penerima "Momo Velia Deviluke"
-        $mail->to('momo@deviluke', 'Momo Velia Deviluke');
+Route::post('notif', function() {
+    dd(1);
+});
+Route::get('veritrans', function() {
+    // Required
+    $transaction_details = array(
+        'order_id' => rand(),
+        'gross_amount' => 145000, // no decimal allowed for creditcard
+    );
 
-        // Copy carbon dikirimkan ke address "haruna@sairenji" 
-        // dengan nama penerima "Haruna Sairenji"
-        $mail->cc('haruna@sairenji', 'Haruna Sairenji');
+// Optional
+    $item1_details = array(
+        'id' => 'a1',
+        'price' => 50000,
+        'quantity' => 2,
+        'name' => "Apple"
+    );
 
-        $mail->subject('Hello World!');
-    });
+// Optional
+    $item2_details = array(
+        'id' => 'a2',
+        'price' => 45000,
+        'quantity' => 1,
+        'name' => "Orange"
+    );
+
+// Optional
+    $items_details = array($item1_details, $item2_details);
+
+// Optional
+    $billing_address = array(
+        'first_name' => "Andri",
+        'last_name' => "Litani",
+        'address' => "Mangga 20",
+        'city' => "Jakarta",
+        'postal_code' => "16602",
+        'phone' => "081122334455",
+        'country_code' => 'IDN'
+    );
+
+// Optional
+    $shipping_address = array(
+        'first_name' => "Obet",
+        'last_name' => "Supriadi",
+        'address' => "Manggis 90",
+        'city' => "Jakarta",
+        'postal_code' => "16601",
+        'phone' => "08113366345",
+        'country_code' => 'IDN'
+    );
+
+// Optional
+    $customer_details = array(
+        'first_name' => "Andri",
+        'last_name' => "Litani",
+        'email' => "andri@litani.com",
+        'phone' => "081122334455",
+        'billing_address' => $billing_address,
+        'shipping_address' => $shipping_address
+    );
+
+// Fill transaction details
+    $transaction = array(
+        'payment_type' => 'vtweb',
+        "vtweb" => array(
+            "credit_card_3d_secure" => true,
+            //Set Redirection URL Manually
+            "finish_redirect_url" => url('checkout/complete'),
+            "unfinish_redirect_url" => url('checkout/uncomplete'),
+            "error_redirect_url" => url('checkout/error'),
+        ),
+        'transaction_details' => $transaction_details,
+        'customer_details' => $customer_details,
+        'item_details' => $items_details,
+    );
+    $vtweb_url = Veritrans_VtWeb::getRedirectionUrl($transaction);
+    return redirect($vtweb_url);
 });
 
 Route::get('test', function() {
@@ -86,7 +148,7 @@ Route::get('login/{provider?}', 'backend\LoginCtrl@auth');
 Route::get('account/{provider?}', 'backend\LoginCtrl@auth');
 Route::post('login', ['as' => 'do.login', 'uses' => 'backend\LoginCtrl@doLogin']);
 Route::post('register', ['as' => 'register', 'uses' => 'backend\LoginCtrl@postRegister']);
-Route::get('register/success',['as' => 'register.success', 'uses' => 'Front\PageCtrl@registerSuccess']);
+Route::get('register/success', ['as' => 'register.success', 'uses' => 'Front\PageCtrl@registerSuccess']);
 Route::get('logout', function() {
     Auth::logout();
     return redirect('');
@@ -149,13 +211,14 @@ Route::group(['namespace' => 'Front'], function() {
         Route::get('login', 'PageCtrl@postcheckout');
         Route::get('account', 'PageCtrl@getAccount');
     });
-
     Route::get('checkout', 'PageCtrl@checkout');
     Route::group(['prefix' => 'checkout'], function() {
         Route::post('login', 'PageCtrl@postcheckout');
         Route::get('shipping', 'PageCtrl@shipping');
         Route::post('shipping', 'PageCtrl@postShipping');
         Route::get('payment', 'PageCtrl@getPayment');
+        Route::get('payment-description/{id}', 'PageCtrl@getPaymentDescription');
+        Route::get('complete', 'PageCtrl@getOrderComplete');
     });
     Route::get('/product/{kumis}', 'PageCtrl@show');
     Route::get('/{kumis}', 'PageCtrl@show');

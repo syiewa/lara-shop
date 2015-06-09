@@ -44,3 +44,18 @@ function shopOpt($key = '') {
         return $data->shop_opt_value;
     }
 }
+
+function socialUrl($key = '') {
+    $data = App\Models\Options\SocialOption::where('social_key', $key)->first();
+    if ($data) {
+        return $data->social_value;
+    }
+}
+
+function socialOpt() {
+    return App\Models\Options\SocialOption::all();
+}
+
+function getPayment(){
+    return \App\Models\Options\Payments::where('payment_status','1')->get();
+}

@@ -13,15 +13,15 @@
                         @endif
                         <h2>Rp. {{number_format($pro->product_price,0,',','.')}}</h2>
                         <p>{{ucwords($pro->product_name)}}</p>
-                        <a href="{{url('product/'.$pro->slug)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                        <p><a href='{{url('product/'.$pro->slug)}}'>{{ucwords($pro->product_name)}}</a></p>
                     </div>
                 </div>
-                <div class="choose">
+<!--                <div class="choose">
                     <ul class="nav nav-pills nav-justified">
                         <li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
                         <li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
                     </ul>
-                </div>
+                </div>-->
             </div>
         </div>
         @endforeach

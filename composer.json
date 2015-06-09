@@ -10,7 +10,8 @@
         "davejamesmiller/laravel-breadcrumbs": "~3.0",
         "zizaco/entrust": "dev-laravel-5",
         "laravel/socialite": "~2.0",
-        "fabpot/goutte": "^2.0"
+        "fabpot/goutte": "^2.0",
+        "veritrans/veritrans-php": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",

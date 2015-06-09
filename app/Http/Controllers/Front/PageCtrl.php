@@ -44,7 +44,9 @@ class PageCtrl extends Controller {
         $findcat = Products\Category::with('product')->where('slug', $slug)->first();
         if (count($findcat) == 0) {
             $findpro = Products\Product::where('slug', $slug)->first();
+            
             $this->data['product'] = $findpro;
+            $this->data['related_product'] = Products\Product::where('id_category',$findpro->id_category)->where('id','!=',$findpro->id)->get();
             if (count($findpro) > 0) {
                 return view('front.eshopper.pages.product', $this->data);
             }
@@ -127,7 +129,8 @@ class PageCtrl extends Controller {
         $input = $request->all();
         $user = User::find($input['user_id']);
         $order = Session::get('order');
-        $order['user'] = $request->except('_token');
+        $order['user'] = $request->except('_token','payment_id');
+        $order['payment_id'] = $input['payment_id'];
         Session::put(['order' => $order]);
         if ($user->update($input)) {
 
@@ -135,15 +138,22 @@ class PageCtrl extends Controller {
         }
     }
 
-    public function getPayment() {
-        return 1;
-    }
-
     public function getAccount() {
         if (!Auth::check()) {
             return redirect('customer/login');
         }
         return view('front.eshopper.pages.account', $this->data);
+    }
+    
+    public function getPaymentDescription($id){
+        $payment = \App\Models\Options\Payments::find($id);
+        if($payment){
+            return $payment->payment_description;
+        }
+    }
+    
+    public function getOrderComplete(){
+        return 'Thanks For Order';
     }
 
 }

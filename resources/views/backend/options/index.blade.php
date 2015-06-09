@@ -49,6 +49,16 @@ $(document).ready(function() {
             $("#mail").html(data);
         });
     }
+    var social = function() {
+        $.get("{{url('backend/options/socialindex')}}", function(data) {
+            $("#social").html(data);
+        });
+    }
+    var payment = function() {
+        $.get("{{url('backend/options/paymentindex')}}", function(data) {
+            $("#payment").html(data);
+        });
+    }
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         var target = $(e.target).attr("href") // activated tab
         switch (target) {
@@ -63,6 +73,12 @@ $(document).ready(function() {
                 break;
             case '#mail':
                 mail();
+                break;
+            case '#social':
+                social();
+                break;
+            case '#payment':
+                payment();
                 break;
         }
     });
@@ -102,7 +118,25 @@ $(document).ready(function() {
 
         });
     });
-    $(document).on('submit','#form-mail', function(e) {
+    $(document).on('submit', '#form-mail', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('action');
+        $.post(url, $(this).serialize(), function(data) {
+        }).fail(function(fail) {
+            if (fail.status === 422) {
+                var alert = '';
+                alert += '<div class="alert alert-danger"><strong>Whoops!</strong> There were some problems with your input.<br><br>';
+                alert += '<ul>';
+                $.each(fail.responseJSON, function(key, value) {
+                    alert += '<li>' + value + '</li>';
+                });
+                alert += '</ul>';
+                $("#bahaya").html(alert);
+            }
+
+        });
+    });
+    $(document).on('submit', '#form-social', function(e) {
         e.preventDefault();
         var url = $(this).attr('action');
         $.post(url, $(this).serialize(), function(data) {
@@ -195,20 +229,28 @@ $(document).ready(function() {
                                 <ul class="nav nav-tabs">
                                     <li  class="active"><a href="#general" data-toggle="tab">General Options</a></li>
                                     <li><a href="#shipping" data-toggle="tab">Shipping Option</a></li>
+                                    <li><a href="#payment" data-toggle="tab">Payment Option</a></li>
                                     <li><a href="#shop" data-toggle="tab">Shop Option</a></li>
                                     <li><a href="#mail" data-toggle="tab">Mail Option</a></li>
+                                    <li><a href="#social" data-toggle="tab">Social Option</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="general">
 
                                     </div><!-- /.tab-pane -->
-                                    <div class="tab-pane active" id="shipping">
+                                    <div class="tab-pane" id="shipping">
 
                                     </div><!-- /.tab-pane -->
-                                    <div class="tab-pane active" id="shop">
+                                    <div class="tab-pane" id="shop">
 
                                     </div><!-- /.tab-pane -->
-                                    <div class="tab-pane active" id="mail">
+                                    <div class="tab-pane" id="mail">
+
+                                    </div><!-- /.tab-pane -->
+                                    <div class="tab-pane" id="social">
+
+                                    </div><!-- /.tab-pane -->
+                                    <div class="tab-pane" id="payment">
 
                                     </div><!-- /.tab-pane -->
                                 </div><!-- /.tab-content -->
