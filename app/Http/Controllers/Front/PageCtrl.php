@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use Request;
 use App\Http\Controllers\Controller;
 use App\Models\Products;
+use App\Models\Order\Order;
 use App\Models\Page;
 use App\Models\Widget;
 use App\Models\Users\User;
@@ -12,6 +13,9 @@ use Illuminate\Support\Str;
 use App\Http\Requests\ShippingRequest;
 use Session,
     Auth;
+use Veritrans_VtWeb;
+use Veritrans_Transaction;
+use Exception;
 
 class PageCtrl extends Controller {
 
@@ -30,7 +34,7 @@ class PageCtrl extends Controller {
     }
 
     public function registerSuccess() {
-        return view('front.eshopper.pages.postRegister',$this->data);
+        return view('front.eshopper.pages.postRegister', $this->data);
     }
 
     public function activateAccount($code, User $user) {
@@ -44,9 +48,9 @@ class PageCtrl extends Controller {
         $findcat = Products\Category::with('product')->where('slug', $slug)->first();
         if (count($findcat) == 0) {
             $findpro = Products\Product::where('slug', $slug)->first();
-            
+
             $this->data['product'] = $findpro;
-            $this->data['related_product'] = Products\Product::where('id_category',$findpro->id_category)->where('id','!=',$findpro->id)->get();
+            $this->data['related_product'] = Products\Product::where('id_category', $findpro->id_category)->where('id', '!=', $findpro->id)->get();
             if (count($findpro) > 0) {
                 return view('front.eshopper.pages.product', $this->data);
             }
@@ -98,6 +102,7 @@ class PageCtrl extends Controller {
     private function setOrder($data) {
         $order = [];
         $total = 0;
+
         for ($i = 1; $i <= $data['itemCount']; $i++) {
             $order['shipping'] = [
                 'service' => isset($data['service']) ? $data['service'] : '',
@@ -129,13 +134,33 @@ class PageCtrl extends Controller {
         $input = $request->all();
         $user = User::find($input['user_id']);
         $order = Session::get('order');
-        $order['user'] = $request->except('_token','payment_id');
-        $order['payment_id'] = $input['payment_id'];
+        $order['user'] = $request->except('_token', 'payment_id');
         Session::put(['order' => $order]);
         if ($user->update($input)) {
-
             return response()->json(['success' => TRUE]);
         }
+    }
+
+    public function getReviewPayment() {
+        $this->data['order'] = Session::get('order');
+        $this->data['pay'] = $this->renderPaymentLink($this->data['order']);
+        return view('front.eshopper.pages.review-payment', $this->data);
+    }
+
+    public function postOrder() {
+        $orders = Session::get('order');
+        $order = new Order();
+        $order->user_id = $orders['user']['user_id'];
+        $order->order_id = Order::max()+1;
+        $order->total_price = $orders['total'];
+        $order->shipping_type = $orders['shipping']['service'];
+        $order->shipping_to = $orders['shipping']['city'];
+        $order->shipping_fee = $orders['shipping']['fee'];
+        $order->save();
+        foreach ($orders['product'] as $product) {
+            $order->orders()->attach($product['id'], ['quantity' => $product['product_qty']]);
+        }
+        return response()->json(['success' => TRUE]);
     }
 
     public function getAccount() {
@@ -144,16 +169,94 @@ class PageCtrl extends Controller {
         }
         return view('front.eshopper.pages.account', $this->data);
     }
-    
-    public function getPaymentDescription($id){
+
+    public function getPaymentDescription($id) {
         $payment = \App\Models\Options\Payments::find($id);
-        if($payment){
+        if ($payment) {
             return $payment->payment_description;
         }
     }
-    
-    public function getOrderComplete(){
-        return 'Thanks For Order';
+
+    public function getOrderComplete() {
+        try {
+            $status = Veritrans_Transaction::status(Request::get('order_id'));
+            $order = Order::where('order_id', $status->order_id)->first();
+            $order->payment_id = \App\Models\Options\Payments::where('payment_type', $status->payment_type)->first()->id;
+            $order->order_status = $status->transaction_status;
+            $order->save();
+        } catch (Exception $exc) {
+            Session::flash('error', $exc->getMessage());
+        }
+        if (!Session::has('error')) {
+            Session::forget('order');
+        }
+        return view('front.eshopper.pages.checkout-success', $this->data);
+    }
+
+    private function renderPaymentLink($array = []) {
+
+        $order = $array;
+        $transaction_details = array(
+            'order_id' => Order::max('order_id') + 1,
+            'gross_amount' => $order['total'], // no decimal allowed for creditcard
+        );
+        $i = 0;
+        foreach ($order['product'] as $product) {
+            $items_details = [
+                $i => [
+                    'id' => $product['id'],
+                    'price' => $product['product_price'],
+                    'quantity' => $product['product_qty'],
+                    'name' => $product['product_name']
+                ]
+            ];
+            $i++;
+        }
+        $shipping_fee = [
+            'id' => 'shipping',
+            'price' => $order['shipping']['fee'],
+            'quantity' => '1',
+            'name' => $order['shipping']['service']
+        ];
+        array_push($items_details, $shipping_fee);
+// Optional
+        $billing_address = array(
+            'first_name' => $order['user']['first_name'],
+            'last_name' => $order['user']['last_name'],
+            'address' => $order['user']['address'],
+            'city' => getCity($order['user']['city']),
+            'postal_code' => "55281",
+            'phone' => $order['user']['mob_phone'],
+            'country_code' => 'IDN'
+        );
+
+// Optional
+        $customer_details = array(
+            'first_name' => $order['user']['first_name'],
+            'last_name' => $order['user']['last_name'],
+            'email' => $order['user']['email'],
+            'phone' => $order['user']['mob_phone'],
+            'billing_address' => $billing_address,
+            'shipping_address' => $billing_address
+        );
+
+// Fill transaction details
+        $transaction = array(
+            'payment_type' => 'vtweb',
+            "vtweb" => array(
+                "enabled_payments" => getPayment(),
+                "credit_card_3d_secure" => true,
+                //Set Redirection URL Manually
+                "finish_redirect_url" => url('checkout/complete'),
+                "unfinish_redirect_url" => url('checkout/uncomplete'),
+                "error_redirect_url" => url('checkout/error'),
+            ),
+            'transaction_details' => $transaction_details,
+            'customer_details' => $customer_details,
+            'item_details' => $items_details,
+        );
+        $vtweb_url = Veritrans_VtWeb::getRedirectionUrl($transaction);
+        return $vtweb_url;
     }
 
 }

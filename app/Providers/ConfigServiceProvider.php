@@ -19,9 +19,10 @@ class ConfigServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        Veritrans_Config::$serverKey = 'VT-server-RXUmTDNgObwCyX1k3Yyv2ry2';
+        
+        Veritrans_Config::$serverKey = env('VERITRANS_KEY', '');
 // Use sandbox account
-        Veritrans_Config::$isProduction = false;
+        Veritrans_Config::$isProduction = env('VERITRANS_PRO', false);
         $mail = DB::table('option_mail')->lists('mail_value', 'mail_key');
         $email = DB::table('option_general')->lists('gen_store_val', 'gen_store_name');
         if ($mail && $email) {

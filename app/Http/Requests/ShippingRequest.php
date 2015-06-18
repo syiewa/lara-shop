@@ -24,7 +24,7 @@ class ShippingRequest extends Request {
 		return [
 			//
                     'email' => 'required|email|unique:users,email,' . Request::get('user_id'),
-                    'name' => 'required',
+                    'first_name' => 'required',
                     'address' => 'required',
                     'phone' => 'required',
                     'mob_phone' => 'required'

@@ -29,7 +29,7 @@ class UserRequest extends Request {
         }
         return [
             //
-            'name' => 'required',
+            'first_name' => 'required',
             'email' => 'required|email|unique:users,email,' . Request::get('id'),
             'password' => $password,
             'role' => 'required'
@@ -38,7 +38,7 @@ class UserRequest extends Request {
 
     public function messages() {
         return [
-            'name.required' => 'Nama dibutuhkan',
+            'first_name.required' => 'Nama dibutuhkan',
             'email.required' => 'Email dibutuhkan',
             'email.email' => 'Format email tidak benar',
             'email.unique' => 'Email sudah terdaftar',

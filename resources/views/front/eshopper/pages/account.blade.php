@@ -42,11 +42,11 @@
         <div class="col-sm-12">
             <div class="col-sm-12 col-md-12 user-details">
                 <div class="user-image">
-                    <img src="{{Auth::user()->avatar}}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle">
+                    <img src="{{Auth::user()->avatar}}" alt="{{Auth::user()->first_name}}" title="{{Auth::user()->last_name}}" class="img-circle">
                 </div>
                 <div class="user-info-block">
                     <div class="user-heading">
-                        <h3>{{Auth::user()->name}}</h3>
+                        <h3>{{Auth::user()->first_name.' '.Auth::user()->last_name}}</h3>
                     </div>
                     <ul class="navigation">
                         <li class="active">
@@ -84,7 +84,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Name</label>
-                                            <input type="text" value="{{Auth::user()->name}}" class="form-control" id="name" placeholder="Enter Name" name='name'>
+                                            <input type="text" value="{{Auth::user()->first_name}}" class="form-control" id="name" placeholder="Enter Name" name='first_name'>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Email</label>

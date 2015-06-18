@@ -56,6 +56,15 @@ function socialOpt() {
     return App\Models\Options\SocialOption::all();
 }
 
-function getPayment(){
-    return \App\Models\Options\Payments::where('payment_status','1')->get();
+function getPayment() {
+    $payments = \App\Models\Options\Payments::where('payment_status', '1')->get();
+    foreach($payments as $payment){
+        $data[] = $payment->payment_type; 
+    }
+    return $data;
+}
+
+function getCity($id = '') {
+    $request = Request::create('api/ongkir/city/'.$id, 'GET');
+    return Route::dispatch($request)->getContent();
 }

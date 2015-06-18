@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v9.01 
-MySQL - 5.5.24-log : Database - larashop
+MySQL - 5.6.17 : Database - larashop
 *********************************************************************
 */
 
@@ -46,6 +46,41 @@ CREATE TABLE `option_general` (
 
 insert  into `option_general`(`id`,`gen_store_name`,`gen_store_val`,`created_at`,`updated_at`) values (1,'store_url','http://www.opencart.com/','2015-05-29 12:58:43','2015-05-29 05:58:43'),(2,'store_name','adad','2015-05-29 12:58:44','2015-05-29 05:58:44'),(3,'store_owner','adad','2015-05-29 12:58:44','2015-05-29 05:58:44'),(4,'store_address','adad','2015-05-29 12:58:44','2015-05-29 05:58:44'),(5,'store_email','adadad@ada.com','2015-05-29 12:58:44','2015-05-29 05:58:44'),(6,'store_phone','adadad','2015-05-29 12:58:44','2015-05-29 05:58:44'),(7,'store_fax','adad','2015-05-29 12:58:45','2015-05-29 05:58:45'),(8,'store_logo','girl2.jpg','2015-05-29 12:58:45','2015-05-29 05:58:45');
 
+/*Table structure for table `option_mail` */
+
+DROP TABLE IF EXISTS `option_mail`;
+
+CREATE TABLE `option_mail` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `mail_key` varchar(255) DEFAULT NULL,
+  `mail_value` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+/*Data for the table `option_mail` */
+
+insert  into `option_mail`(`id`,`mail_key`,`mail_value`,`created_at`,`updated_at`) values (1,'mail_driver','SMTP','2015-06-08 07:21:20','2015-06-08 00:21:20'),(2,'mail_host','','2015-06-08 07:21:20','2015-06-08 00:21:20'),(3,'mail_port','587','2015-06-08 07:21:20','2015-06-08 00:21:20'),(4,'mail_username','','2015-06-08 07:21:20','2015-06-08 00:21:20'),(5,'mail_password','','2015-06-08 07:21:21','2015-06-08 00:21:21'),(6,'mail_encryption','TLS','2015-06-08 07:21:21','2015-06-08 00:21:21');
+
+/*Table structure for table `option_payment` */
+
+DROP TABLE IF EXISTS `option_payment`;
+
+CREATE TABLE `option_payment` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `payment_type` varchar(255) DEFAULT NULL,
+  `payment_status` varchar(255) DEFAULT NULL,
+  `payment_description` text,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+
+/*Data for the table `option_payment` */
+
+insert  into `option_payment`(`id`,`payment_type`,`payment_status`,`payment_description`,`created_at`,`updated_at`) values (1,'credit_card','1','','2015-06-16 12:43:46','2015-06-08 20:11:07'),(2,'mandiri_clickpay','1',NULL,'2015-06-16 12:44:21','0000-00-00 00:00:00'),(3,'cimb_clicks','1',NULL,'2015-06-16 12:44:38','0000-00-00 00:00:00'),(4,'bank_transfer','1',NULL,'2015-06-16 12:57:18','0000-00-00 00:00:00'),(5,'bri_epay','1',NULL,'2015-06-16 12:58:14','0000-00-00 00:00:00'),(6,'telkomsel_cash','1',NULL,'2015-06-16 12:58:24','0000-00-00 00:00:00'),(7,'xl_tunai','1',NULL,'2015-06-16 12:58:38','0000-00-00 00:00:00'),(8,'echannel','1',NULL,'2015-06-16 12:58:49','0000-00-00 00:00:00'),(9,'bbm_money','1',NULL,'2015-06-16 12:58:52','0000-00-00 00:00:00'),(10,'cstore','1',NULL,'2015-06-16 12:59:02','0000-00-00 00:00:00');
+
 /*Table structure for table `option_shipping` */
 
 DROP TABLE IF EXISTS `option_shipping`;
@@ -57,11 +92,45 @@ CREATE TABLE `option_shipping` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `option_shipping` */
 
-insert  into `option_shipping`(`id`,`ship_option_name`,`ship_option_value`,`created_at`,`updated_at`) values (1,'enable_shipping','0','2015-05-27 10:10:35','2015-05-27 03:10:35'),(2,'shipping_method','jne,pos','2015-05-27 10:10:35','2015-05-27 03:10:35');
+insert  into `option_shipping`(`id`,`ship_option_name`,`ship_option_value`,`created_at`,`updated_at`) values (1,'enable_shipping','1','2015-06-08 06:45:34','2015-06-07 23:45:34'),(2,'shipping_method','jne,tiki,pos','2015-06-08 06:45:34','2015-06-07 23:45:34'),(3,'rajaongkir_key','c32c3ab9158c2a7d8558d7787c2ca919','2015-06-08 06:45:34','2015-06-07 23:45:34'),(4,'shipping_from','501','2015-06-08 06:45:35','2015-06-07 23:45:35');
+
+/*Table structure for table `option_shop` */
+
+DROP TABLE IF EXISTS `option_shop`;
+
+CREATE TABLE `option_shop` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `shop_opt_name` varchar(255) DEFAULT NULL,
+  `shop_opt_value` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+
+/*Data for the table `option_shop` */
+
+insert  into `option_shop`(`id`,`shop_opt_name`,`shop_opt_value`,`created_at`,`updated_at`) values (1,'product_perpage_front','5','2015-06-03 04:02:53','2015-06-02 21:02:53'),(2,'product_perpage_admin','5','2015-06-03 04:02:54','2015-06-02 21:02:54'),(3,'display_mode','0','2015-06-03 04:02:54','2015-06-02 21:02:54'),(4,'category_product_count','0','2015-06-03 04:02:54','2015-06-02 21:02:54'),(5,'enable_slideshow','1','2015-06-03 04:06:18','0000-00-00 00:00:00'),(7,'share_button_product','0','2015-06-03 04:31:24','0000-00-00 00:00:00');
+
+/*Table structure for table `option_social` */
+
+DROP TABLE IF EXISTS `option_social`;
+
+CREATE TABLE `option_social` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `social_key` varchar(255) DEFAULT NULL,
+  `social_value` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+/*Data for the table `option_social` */
+
+insert  into `option_social`(`id`,`social_key`,`social_value`,`created_at`,`updated_at`) values (1,'facebook','http://facebook.com/instagram','2015-06-08 03:24:27','2015-06-07 20:17:14'),(2,'twitter','http://twitter.com/syiewa','2015-06-08 02:25:54','2015-06-07 19:25:54'),(3,'instagram','http://instagram.com/syiewa','2015-06-08 02:25:54','2015-06-07 19:25:54'),(4,'google+','https://plus.google.com/syiewa','2015-06-08 02:25:54','2015-06-07 19:25:54');
 
 /*Table structure for table `order` */
 
@@ -69,17 +138,23 @@ DROP TABLE IF EXISTS `order`;
 
 CREATE TABLE `order` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) DEFAULT NULL,
   `user_id` int(10) NOT NULL,
   `payment_id` int(10) DEFAULT NULL,
+  `order_status` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `update_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `total_price` int(100) DEFAULT NULL,
-  `options` text,
-  `status` int(10) DEFAULT NULL,
+  `comments` text,
+  `shipping_type` varchar(255) DEFAULT NULL,
+  `shipping_fee` varchar(255) DEFAULT NULL,
+  `shipping_to` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 /*Data for the table `order` */
+
+insert  into `order`(`id`,`order_id`,`user_id`,`payment_id`,`order_status`,`created_at`,`updated_at`,`total_price`,`comments`,`shipping_type`,`shipping_fee`,`shipping_to`) values (10,NULL,11,NULL,NULL,'2015-06-18 02:48:50','2015-06-18 02:48:50',103000,NULL,'jne-CTC-4000','3000','419'),(11,1,11,3,'settlement','2015-06-18 09:54:38','2015-06-18 02:54:38',104000,NULL,'jne-CTC-4000','4000','419');
 
 /*Table structure for table `order_product` */
 
@@ -92,6 +167,8 @@ CREATE TABLE `order_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `order_product` */
+
+insert  into `order_product`(`order_id`,`product_id`,`quantity`) values (9,26,1),(10,26,1),(11,26,1);
 
 /*Table structure for table `pages` */
 
@@ -345,10 +422,12 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `first_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `last_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `activation_code` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(10) DEFAULT NULL,
@@ -361,13 +440,14 @@ CREATE TABLE `users` (
   `city` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `province` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `address` text COLLATE utf8_unicode_ci,
+  `postal_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`name`,`email`,`password`,`remember_token`,`created_at`,`updated_at`,`status`,`username`,`avatar`,`provider`,`provider_id`,`phone`,`mob_phone`,`city`,`province`,`address`) values (2,'admin','ada@ada.com','$2y$10$OK6MOdj89yFJ3rXiIb9vyO7aQrUgzQLNzM7Mx8MabcYI5OmDtWO2i','sFWSxayqpmBRtqhPUyp86hzdxFA1HXNUOzaZEnf3DpU9p0DRoUOsdEH6nQ5K','2015-05-19 03:00:32','2015-05-26 01:38:39',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(6,'test 12345','telo33@telo.com','',NULL,'2015-05-20 04:01:38','2015-05-20 04:08:00',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(9,'Wasi Arnosa','devil.syiewa@gmail.com','$2y$10$4xJ47eOcHvb.HqpAM32WxOG1CaufB5aryFP01kumUMJ8Xf.mc3uR6','lULeUHuJ8wU0XZQVhBxhFyylumjKEmHUwKd9Bu0vx6vKTTxGqUouRd0kT65x','2015-05-22 08:04:42','2015-05-29 01:35:01',1,NULL,'https://graph.facebook.com/v2.2/1044947206/picture?type=normal',NULL,'1044947206','1414141','114141','501','5','address 1'),(10,'Wasi Arnosa',NULL,'','ISobhoKS8O3VjjyzrlQJw0sbyl8MKbDealJM630VgxdAqrXGEbgxy6XdVOfS','2015-05-25 03:58:58','2015-05-26 01:42:47',1,'Syiewa','http://pbs.twimg.com/profile_images/450900068724273152/IGbwH2oI_normal.jpeg',NULL,'63434803',NULL,NULL,NULL,NULL,NULL);
+insert  into `users`(`id`,`first_name`,`last_name`,`email`,`password`,`remember_token`,`activation_code`,`created_at`,`updated_at`,`status`,`username`,`avatar`,`provider`,`provider_id`,`phone`,`mob_phone`,`city`,`province`,`address`,`postal_code`) values (2,'admin',NULL,'ada@ada.com','$2y$10$OK6MOdj89yFJ3rXiIb9vyO7aQrUgzQLNzM7Mx8MabcYI5OmDtWO2i','sFWSxayqpmBRtqhPUyp86hzdxFA1HXNUOzaZEnf3DpU9p0DRoUOsdEH6nQ5K',NULL,'2015-05-19 03:00:32','2015-05-26 01:38:39',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(6,'test 12345',NULL,'telo33@telo.com','',NULL,NULL,'2015-05-20 04:01:38','2015-05-20 04:08:00',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(9,'Wasi Arnosa',NULL,'devil.syiewa@gmail.com','$2y$10$4xJ47eOcHvb.HqpAM32WxOG1CaufB5aryFP01kumUMJ8Xf.mc3uR6','OlZQ3hA1MLoNEZrwTyH1XMuDM51Rdn91iSQPtudZaBYCyprxbJArL9OmUm0d',NULL,'2015-05-22 08:04:42','2015-06-16 03:48:16',1,NULL,'https://graph.facebook.com/v2.2/1044947206/picture?type=normal',NULL,'1044947206','1414141','114141','','','address 1',NULL),(10,'Wasi Arnosa',NULL,NULL,'','Vjpji04YgcdimjOaNg85liT2ljY9ZjPK4jhArIII2H8dbKEIFObvVKy20h9O',NULL,'2015-05-25 03:58:58','2015-06-16 03:51:10',1,'Syiewa','http://pbs.twimg.com/profile_images/450900068724273152/IGbwH2oI_normal.jpeg',NULL,'63434803',NULL,NULL,NULL,NULL,NULL,NULL),(11,'telo','kampret','ada12@ada.com','$2y$10$hxTypSMnmiSjCKhFtltsN.mOOTiryjwU8NDY3ufBnbuVDt4rTLYne',NULL,'ABXhBH9zPwwYe4SlW5j5JXFJqxlt3q6CfnddyOaRT7TTqxePh1Wi3vIiaWIrada12@ada.com','2015-06-16 03:56:41','2015-06-18 02:52:40',1,NULL,NULL,NULL,NULL,'89183131','131313131','419','5','satu dua tiga',NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

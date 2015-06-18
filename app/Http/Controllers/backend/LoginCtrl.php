@@ -57,7 +57,7 @@ class LoginCtrl extends Controller {
 
     public function postRegister(RegisterRequest $request) {
         $input = $request->all();
-        $input['status'] = 1;
+        $input['status'] = 0;
         $input['password'] = bcrypt($input['password']);
         $input['activation_code'] = str_random(60) . $input['email'];
         $user = new User($input);

@@ -60,8 +60,12 @@ $(function() {
                         </div>
                         @endif
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Name</label>
-                            <input type="text" value="{{old('name')}}" class="form-control" id="name" placeholder="Enter Name" name='name'>
+                            <label for="exampleInputEmail1">First Name</label>
+                            <input type="text" value="{{old('first_name')}}" class="form-control" id="first_name" placeholder="Enter First Name" name='first_name'>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Last Name</label>
+                            <input type="text" value="{{old('last_name')}}" class="form-control" id="last_name" placeholder="Enter First Name" name='last_name'>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>

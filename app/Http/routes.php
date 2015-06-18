@@ -13,129 +13,50 @@
 // Permission route
 Entrust::routeNeedsPermission('backend/*', ['backend'], redirect(''));
 
-Route::post('notif', function() {
-    dd(1);
-});
-Route::get('veritrans', function() {
-    // Required
-    $transaction_details = array(
-        'order_id' => rand(),
-        'gross_amount' => 145000, // no decimal allowed for creditcard
-    );
-
-// Optional
-    $item1_details = array(
-        'id' => 'a1',
-        'price' => 50000,
-        'quantity' => 2,
-        'name' => "Apple"
-    );
-
-// Optional
-    $item2_details = array(
-        'id' => 'a2',
-        'price' => 45000,
-        'quantity' => 1,
-        'name' => "Orange"
-    );
-
-// Optional
-    $items_details = array($item1_details, $item2_details);
-
-// Optional
-    $billing_address = array(
-        'first_name' => "Andri",
-        'last_name' => "Litani",
-        'address' => "Mangga 20",
-        'city' => "Jakarta",
-        'postal_code' => "16602",
-        'phone' => "081122334455",
-        'country_code' => 'IDN'
-    );
-
-// Optional
-    $shipping_address = array(
-        'first_name' => "Obet",
-        'last_name' => "Supriadi",
-        'address' => "Manggis 90",
-        'city' => "Jakarta",
-        'postal_code' => "16601",
-        'phone' => "08113366345",
-        'country_code' => 'IDN'
-    );
-
-// Optional
-    $customer_details = array(
-        'first_name' => "Andri",
-        'last_name' => "Litani",
-        'email' => "andri@litani.com",
-        'phone' => "081122334455",
-        'billing_address' => $billing_address,
-        'shipping_address' => $shipping_address
-    );
-
-// Fill transaction details
-    $transaction = array(
-        'payment_type' => 'vtweb',
-        "vtweb" => array(
-            "credit_card_3d_secure" => true,
-            //Set Redirection URL Manually
-            "finish_redirect_url" => url('checkout/complete'),
-            "unfinish_redirect_url" => url('checkout/uncomplete'),
-            "error_redirect_url" => url('checkout/error'),
-        ),
-        'transaction_details' => $transaction_details,
-        'customer_details' => $customer_details,
-        'item_details' => $items_details,
-    );
-    $vtweb_url = Veritrans_VtWeb::getRedirectionUrl($transaction);
-    return redirect($vtweb_url);
-});
-
-Route::get('test', function() {
-    $url = 'http://leesummithighschool.rschoolteams.com/';
-    $apaya = [];
-    $client = new Goutte\Client();
-    $crawler = $client->request('GET', $url);
-    $client->getClient()->setDefaultOption('config/curl/' . CURLOPT_TIMEOUT, 60);
-    $activities = $crawler->filter('ul[class="dropdown-menu sub-menu"] > li[class="dropdown"]')->each(function ($node) {
-        $act = $node->filter('a[class="dropdown-toggle"]')->text();
-        $type = $node->filter('ul li a')->each(function($child) {
-            $url = 'http://fargosouthhighschool.rschoolteams.com/';
-            return ['sub' => trim($child->text()), 'url' => $url . $child->attr('href')];
-        });
-        $data[$act] = $type;
-        return [$act => $type];
-    });
-    foreach ($activities as $key => $val) {
-        foreach ($val as $taek => $kamp) {
-            $apaya[$taek] = $kamp;
-        }
-    }
-    $table = new Goutte\Client();
-    foreach ($apaya as $key => $val) {
-        foreach ($val as $url) {
-            $batman = $table->request('GET', $url['url']);
-            $table->getClient()->setDefaultOption('config/curl/' . CURLOPT_TIMEOUT, 60);
-            dd($batman->filter('table[class="table table-bordered table-striped"]'));
-        }
-    }
-});
-Route::get('as', function() {
-    $url = 'https://serve-ssl.rschooltoday.com/secure4/gkcsconference/g5-bin/setup.cgi?ssl=1&G5button=7&G5tab=1&G5location=internet';
-    $client = new Goutte\Client();
-    $crawler = $client->request('GET', $url);
-    $form = $crawler->selectButton('Login')->form(array(
-        'G5Login_username' => 'chad.hertzog',
-        'G5Login_password' => 'chad.hertzog',
-    ));
-    $crawler = $client->submit($form);
-    echo $crawler->html();
-});
+//Route::get('test', function() {
+//    $url = 'http://leesummithighschool.rschoolteams.com/';
+//    $apaya = [];
+//    $client = new Goutte\Client();
+//    $crawler = $client->request('GET', $url);
+//    $client->getClient()->setDefaultOption('config/curl/' . CURLOPT_TIMEOUT, 60);
+//    $activities = $crawler->filter('ul[class="dropdown-menu sub-menu"] > li[class="dropdown"]')->each(function ($node) {
+//        $act = $node->filter('a[class="dropdown-toggle"]')->text();
+//        $type = $node->filter('ul li a')->each(function($child) {
+//            $url = 'http://fargosouthhighschool.rschoolteams.com/';
+//            return ['sub' => trim($child->text()), 'url' => $url . $child->attr('href')];
+//        });
+//        $data[$act] = $type;
+//        return [$act => $type];
+//    });
+//    foreach ($activities as $key => $val) {
+//        foreach ($val as $taek => $kamp) {
+//            $apaya[$taek] = $kamp;
+//        }
+//    }
+//    $table = new Goutte\Client();
+//    foreach ($apaya as $key => $val) {
+//        foreach ($val as $url) {
+//            $batman = $table->request('GET', $url['url']);
+//            $table->getClient()->setDefaultOption('config/curl/' . CURLOPT_TIMEOUT, 60);
+//            dd($batman->filter('table[class="table table-bordered table-striped"]'));
+//        }
+//    }
+//});
+//Route::get('as', function() {
+//    $url = 'https://serve-ssl.rschooltoday.com/secure4/gkcsconference/g5-bin/setup.cgi?ssl=1&G5button=7&G5tab=1&G5location=internet';
+//    $client = new Goutte\Client();
+//    $crawler = $client->request('GET', $url);
+//    $form = $crawler->selectButton('Login')->form(array(
+//        'G5Login_username' => 'chad.hertzog',
+//        'G5Login_password' => 'chad.hertzog',
+//    ));
+//    $crawler = $client->submit($form);
+//    echo $crawler->html();
+//});
 Route::pattern('kumis', '.+');
-Route::get('backend', function() {
-    return 'telo';
-});
+//Route::get('backend', function() {
+//    return 'telo';
+//});
 //Route::get('home', 'HomeController@index');
 //
 //Route::controllers([
@@ -218,6 +139,8 @@ Route::group(['namespace' => 'Front'], function() {
         Route::post('shipping', 'PageCtrl@postShipping');
         Route::get('payment', 'PageCtrl@getPayment');
         Route::get('payment-description/{id}', 'PageCtrl@getPaymentDescription');
+        Route::get('review','PageCtrl@getReviewPayment');
+        Route::post('postorder','PageCtrl@postOrder');
         Route::get('complete', 'PageCtrl@getOrderComplete');
     });
     Route::get('/product/{kumis}', 'PageCtrl@show');
